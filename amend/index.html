@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>README</title>
+  <title>Amend</title>
   <style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
@@ -13,30 +13,49 @@
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
     ul.task-list{list-style: none;}
   </style>
-  <link rel="stylesheet" href="/style.css" />
 </head>
 <body>
 <header id="title-block-header">
-<h1 class="title">README</h1>
+<h1 class="title">Amend</h1>
 </header>
 <h1 id="amend">Amend</h1>
 <p>Source code revision tool.</p>
 <h2 id="description">Description</h2>
-<p>FIXME</p>
+<p>A lot of software is accompanied by additional developer tools to update or check certain features of the source code. This may, for example, include updating a date, such as in the copyright notice. In other examples the developer is required to “grep” through multiple source files to ensure correct order of elements (such as is the case in the <a href="https://www.lua.org">Lua</a> <a href="https://github.com/lua">source code</a>, for example the ‘’OP’’ <a href="https://github.com/lua/lua/blob/master/lopcodes.h">order</a>) — a task fit for automation.</p>
+<p>The author(s) of ‘’amend’’ have repeatedly reinvented wheels (read utilities) to prepare software releases for each new software they were working on. The ‘’amend’’ package is (a possibly <a href="https://xkcd.com/927/">futile</a>) attempt to create a generic tool for such purposes: yet, the author(s) are using it succesfully in several projects and, therefore, disclose it to the public.</p>
+<h2 id="installation">Installation</h2>
+<p>On systems where symbolic links can be used, a symbolic link to the ‘amend’ command is sufficient. Otherwise the environment variable ‘’AMENDDIR’’ may be set accordingly.</p>
 <h2 id="api">API</h2>
+<h3 id="version">Version</h3>
+<h4 id="version-1"><code>VERSION</code></h4>
 <h3 id="globals">Globals</h3>
-<pre><code> EXECDIR             Path, where &#39;&#39;amend.lua&#39;&#39; was started.
- ROOTDIR             Project root (where &#39;&#39;.amend/project.lua&#39;&#39; was found).
- PROJECTFILE         Full path to the &#39;&#39;.amend/project.lua&#39;&#39; file.
- PROJECT             Project settings.
- CONFIG              Amend settings.
- TOOLS               System tools (see &#39;amend/tools.lua&#39;)
- PATHS               Additional module paths.
- IGNORE              Files or directories generally to ignore (list of regex patterns, using .gitingore if available).
- VERBOSE             Verbosity level.</code></pre>
+<p>The following global variables are set or determined at startup:</p>
+<pre><code>  EXECDIR             Path, where &#39;&#39;amend.lua&#39;&#39; was started.
+  ROOTDIR             Project root (where &#39;&#39;.amend/project.lua&#39;&#39; was found).
+  PROJECTFILE         Full path to the &#39;&#39;.amend/project.lua&#39;&#39; file.</code></pre>
+<p>To separate source from other files, the variable</p>
+<pre><code>  IGNORE              Files or directories generally to ignore.</code></pre>
+<p>is populated (regular expressions) at startup. This list is automatically extended if ‘’amend’’ finds the following files, containing wild-card patterns, in the ‘’ROOTDIR’’:</p>
+<pre><code>  .amend/ignore
+  .gitignore</code></pre>
+<p>The project file contains the general configuration variables:</p>
+<pre><code>  PROJECT             Project settings.
+  CONFIG              Amend settings.
+  TOOLS               System tools (see &#39;amend/tools.lua&#39;)
+  PATHS               Additional module paths.</code></pre>
+<p>See [amend.api.project] for details.</p>
 <h3 id="project-configuration">Project configuration</h3>
+<h4 id="projects.">Projects.</h4>
+<p>FIXME</p>
+<h5 id="api-1">API</h5>
+<h6 id="configuration.">Configuration.</h6>
+<p>FIXME</p>
+<h6 id="settings.">Settings.</h6>
+<p>FIXME</p>
+<h6 id="tools.">Tools.</h6>
 <p>FIXME</p>
 <h3 id="components">Components</h3>
+<h4 id="components-1">Components</h4>
 <p>“Amend components” can be created anywhere in the source code tree in a sub-folder “.amend”. The first line of such a component starts with a shebang of the format</p>
 <pre><code>#![indicator]&lt;component-name&gt; [&lt;argument-description&gt;] -- &lt;component-description&gt;</code></pre>
 <p>where the ‘indicator’ is</p>
@@ -45,198 +64,59 @@ _           This defines a &quot;hidden&quot; component (which is only executed 
 <p>If the <indicator> is omitted, the component behaves like a command and is executed only on explicit request.</p>
 <p>Example:</p>
 <pre><code>#!*check [&lt;arguments&gt;] Check system.
-
 depends &quot;check-os&quot;
 verbose &quot;Checking system&quot;
 
-assert(os.command(&quot;cmake --version&quot;))</code></pre>
-<p>…</p>
-<h4 id="depends-name"><code>depends '&lt;name&gt;'</code></h4>
-<p>Include a dependecy.</p>
-<h4 id="message-level-text"><code>message [{&lt;level&gt;}] "&lt;text&gt;"</code></h4>
-<h4 id="messagelevellevel-name-text-..."><code>message(&lt;level&gt;|&lt;level-name&gt;, "&lt;text&gt;", ...)</code></h4>
-<p>Emit an informational message.</p>
-<p><strong>Arguments:</strong></p>
+assert(os.command(&quot;cmake --version&quot;))
+
+-- ...</code></pre>
+<h5 id="help"><code>help()</code></h5>
+<h5 id="shebang"><code>shebang()</code></h5>
+<h5 id="scandir"><code>scandir()</code></h5>
+<h5 id="find"><code>find()</code></h5>
+<h5 id="run"><code>_run()</code></h5>
+<h5 id="run-1"><code>run()</code></h5>
+<h5 id="depends-name"><code>depends '&lt;name&gt;'</code></h5>
+<h3 id="tools">Tools</h3>
+<h4 id="tools.-1">Tools.</h4>
 <p>FIXME</p>
 <h3 id="utilities">Utilities</h3>
-<h4 id="editing">Editing</h4>
-<p>Amend provides several utilities for editing files.</p>
-<h4 id="sectionclear"><strong>section</strong>:<code>clear()</code></h4>
-<p>Clear contents.</p>
-<h4 id="sectionaddlncode-..."><strong>section</strong>:<code>addln(code, ...)</code></h4>
-<p>Add a code line.</p>
-<h4 id="sectionaddcode-..."><strong>section</strong>:<code>add(code, ...)</code></h4>
-<p>Add code to current line.</p>
-<h4 id="sectionsedpattern-replace"><strong>section</strong>:<code>sed(pattern, replace)</code></h4>
-<p>In-place sed.</p>
-<h4 id="sectionwritestream"><strong>section</strong>:<code>write(stream)</code></h4>
-<p>Write section to a stream.</p>
-<h4 id="section"><strong>section</strong><code>()</code></h4>
-<p>Constructor.</p>
-<h4 id="fileparsepath"><strong>file</strong>:<code>parse(path)</code></h4>
-<p>Parse file (into sections)</p>
-<h4 id="fixme"><code>FIXME</code></h4>
-<p>Update file.</p>
-<h4 id="fixme-1"><code>FIXME</code></h4>
-<p>In-place sed.</p>
-<h4 id="fixme-2"><code>FIXME</code></h4>
-<p>Constructor.</p>
-<h4 id="fixme-3"><code>FIXME</code></h4>
-<p>Edit a file. <span class="citation" data-cites="fn">@fn</span> edit.file(&lt;filen-ame(s)&gt;)</p>
-<p>FIXME</p>
-<h4 id="extensions-to-luafilesystem.">Extensions to LuaFileSystem.</h4>
-<h5 id="fs.concat..."><code>fs.concat(...)</code></h5>
-<p>Concatenate path elements.</p>
-<p><strong>Arguments:</strong></p>
-<pre><code> ...             List of path elements.</code></pre>
-<p><strong>Returns:</strong> Concatenated path elements using builtin directory seperator.</p>
-<h5 id="fs.partsfname"><code>fs.parts(fname)</code></h5>
-<p>Get parts of a file name (path, file and extension).</p>
-<p><strong>Arguments:</strong></p>
-<pre><code> fname           The file- or path-name.</code></pre>
-<p><strong>Returns:</strong> <path>,<file-name>,<extension></p>
-<h5 id="fs.relpathpath-root"><code>fs.relpath(path, root)</code></h5>
-<p>Get relative path with respect to a “root”.</p>
-<p><strong>Arguments:</strong></p>
-<pre><code> path            The &#39;path&#39; to split.
- root [optional] The root path.</code></pre>
-<p><strong>Returns:</strong> <relative-path></p>
-<h5 id="fs.readwildfile-tbl"><code>fs.readwild(file, tbl)</code></h5>
-<p>Read a wildcard pattern file.</p>
-<p><strong>Arguments:</strong></p>
-<pre><code> file                The file name (containing wildcard patterns and comments).
- tbl [optional]      Existing table (with regex patterns).</code></pre>
-<h5 id="fs.dodirpath-callback-options"><code>fs.dodir(path, callback, options)</code></h5>
-<p>Execute a function for each directory element possibly recursively.</p>
-<p><strong>Arguments:</strong></p>
-<pre><code> path                    The path to iterate over.
- callback                Callback function for elements (must return true for recursion).
- options [optional]      Options.</code></pre>
-<p>This function executes the <code>callback</code> for each element in the alpha-numerically sorted directory list. Arguments passed to the callback are: [1] Table with entries as returned by <code>fs.parts</code> and the absolute path at index 0. The table also contains the key ‘attr’ with file attributes as returned by <code>symlinkattributes</code>, and ‘options’, with the <code>options</code> table. If recursion is enabled, FIXME</p>
-<p>Options: exclude List of regex-patterns of files or directories to ignore (default: {‘[.]’, ‘[.][.]’}). include List of regex-patterns of files or directories to include (overrides ‘exclude’). extension Only report files or directories matching list of given extensions. mode File type (<code>mode</code> field of <code>attributes()</code> function). follow Follow symbolic links (default: false) recurse Enable directory recursion (default: false). depth Directory depth (default: 0)</p>
-<h5 id="fs.pushddir"><code>fs.pushd(dir)</code></h5>
-<p>“Push” directory.</p>
-<p>Equivalent of shell command ‘’pushd’’.</p>
-<h5 id="fs.popd"><code>fs.popd()</code></h5>
-<p>“Pop” directory.</p>
-<p>Equivalent of shell command ‘’popd’’.</p>
-<h5 id="fs.rmkdirfpath"><code>fs.rmkdir(fpath)</code></h5>
-<p>Recursively create directory.</p>
-<p><strong>Arguments:</strong></p>
-<pre><code> fpath       The directory-path to create.</code></pre>
-<p><strong>Returns:</strong> <status>[, <error-message>] The value of LuaFilesystem’s <a href="https://keplerproject.github.io/luafilesystem/manual.html#mkdir">mkdir</a> command.</p>
-<h5 id="fs.grepfname-pattern"><code>fs.grep(fname, pattern)</code></h5>
-<p>Grep-like matching</p>
-<h5 id="fs.filetypefname"><code>fs.filetype(fname)</code></h5>
-<p>Get file type (from extension). FIXME</p>
-<h4 id="csv-file-tools.">CSV-file tools.</h4>
-<p><code>csv.load(fname, [opts])</code> Read a CSV file.</p>
-<p><strong>Arguments:</strong></p>
-<pre><code> fname       File name.
- opts        Options.</code></pre>
-<p>Options: &gt; { &gt; comment = ‘<pattern>’, &gt; separator = ‘separator’, &gt; columns = { <column-names-list> },<br />
-&gt; filter = <item-filter-function> &gt; }</p>
-<h4 id="yaml-support.">YAML support.</h4>
-<p>Here, the official <a href="https://github.com/gvvaughan/lyaml">YAML bindings</a> are used with some extensions.</p>
-<p>FIXME tbd</p>
+<h4 id="message-logging">Message logging</h4>
+<h5 id="verbose"><code>VERBOSE</code></h5>
+<h5 id="verbosity-levels.">Verbosity levels.</h5>
+<h5 id="error">ERROR</h5>
+<h5 id="warning">WARNING</h5>
+<h5 id="notice">NOTICE</h5>
+<h5 id="status">STATUS</h5>
+<h5 id="info">INFO</h5>
+<h5 id="debug">DEBUG</h5>
+<h5 id="error-1">ERROR</h5>
+<h5 id="message"><code>message()</code></h5>
+<h5 id="verbosity-level"><code>verbosity [{&lt;level&gt;}]</code></h5>
 <h3 id="lua-extensions">Lua extensions</h3>
-<h4 id="package">Package</h4>
-<h5 id="packageaddpathpath"><code>package:addpath(path)</code></h5>
-<p>Add search directory to script path.</p>
-<h5 id="packagepushpathpath"><code>package:pushpath(path)</code></h5>
-<p>Temporarily add a script search path.</p>
-<h5 id="packagepoppath"><code>package:poppath()</code></h5>
-<p>Remove previously added script search path.</p>
-<h4 id="string">String</h4>
-<h5 id="string.anys-tbl-exact"><code>string.any(s, tbl, exact)</code></h5>
-<p>Match elements from a table.</p>
-<p><strong>Arguments:</strong></p>
-<pre><code> s                   The string.
- tbl                 Table with regex-patterns.
- exact [optional]    Boolean value indicating if matching must be exact.</code></pre>
-<p><strong>Returns:</strong> Matched string, otherwise ‘’nil’’.</p>
-<h5 id="string.trims"><code>string.trim(s)</code></h5>
-<p>Trim string.</p>
-<h5 id="string.titles"><code>string.title(s)</code></h5>
-<p>Make string “titlecase”.</p>
-<h5 id="string.untitles"><code>string.untitle(s)</code></h5>
-<p>Undo “titlecase”.</p>
-<h5 id="stringsplitsseparator-nmax-bregexp"><code>string:split(sSeparator, nMax, bRegexp)</code></h5>
-<p>String split. See http://lua-users.org/wiki/SplitJoin</p>
-<h4 id="table">Table</h4>
-<h5 id="table.hastbl-item"><code>table.has(tbl, item)</code></h5>
-<p>Check if array-part of a table has an element.</p>
-<p><strong>Arguments:</strong></p>
-<pre><code> tbl         The table to check.
- item        The item.</code></pre>
-<h5 id="table.kpairstbl"><code>table.kpairs(tbl)</code></h5>
-<p>Key-only table iterator. This function ignores integer-valued keys.</p>
-<h5 id="table.counttbl"><code>table.count(tbl)</code></h5>
-<p>Count all keys in a table.</p>
-<h5 id="table.hinttbl"><code>table.hint(tbl)</code></h5>
-<p>Get/set “hint” table. FIXME</p>
-<h5 id="table.toptbl-idx"><code>table.top(tbl, idx)</code></h5>
-<p>Get array items from top</p>
-<h5 id="table.copytbl"><code>table.copy(tbl)</code></h5>
-<p>Create a table copy.</p>
-<h4 id="io">IO</h4>
-<h5 id="io.printf..."><code>io.printf(...)</code></h5>
-<p>Equivalent to C’s ‘’printf’’</p>
-<h5 id="io.dumpvalue-options"><code>io.dump(value, options)</code></h5>
-<p>Dump value.</p>
-<p><strong>Arguments:</strong></p>
-<pre><code> value                   Value to stream to output.
- options [optional]      Display options.</code></pre>
-<p>This function dumps value to an output stream.</p>
-<p>The ‘’options’’ is a table, that may contain the following fields:</p>
-<pre><code> stream          Output stream (default: io.stdout).
- indent          Indentation string.
- level           Indentation level.
- key             Table key.
- prefix          Prefix for output (usually only for adding a &quot;return&quot; statement).
- quoted          Always output keys in the [&quot;quoted&quot;] format (default: false)</code></pre>
-<h5 id="io.readallfname"><code>io.readall(fname)</code></h5>
-<p>Read file.</p>
-<p><strong>Arguments:</strong></p>
-<pre><code> fname           The file name.</code></pre>
-<p><strong>Returns:</strong> text, error</p>
-<h5 id="io.commandprogram-..."><code>io.command(program, ...)</code></h5>
-<p>Execute command and read output.</p>
-<p><strong>Arguments:</strong></p>
-<pre><code>     program                 The command to execute (as format string).
-     ...                     Format options.</code></pre>
-<p><strong>Returns:</strong> output,error FIXME</p>
-<h4 id="os">OS</h4>
-<h5 id="os.commandprogram-..."><code>os.command(program, ...)</code></h5>
-<p>Execute a command.</p>
+<h3 id="tools-1">Tools</h3>
+<h4 id="external-tools.">External tools.</h4>
+<p>FIXME</p>
+<h5 id="api-2">API</h5>
+<h6 id="cmake-support.">CMake support.</h6>
+<p>–</p>
+<p class="heading" id="parse_argsoptions-one_value_keywords-multi_value_keywords-..."><code>parse_args(options, one_value_keywords, multi_value_keywords, ...)</code></p>
+<p class="heading" id="updateconfigfile"><code>update(configfile)</code></p>
+<p class="heading" id="check"><code>check()</code></p>
+<h6 id="git-support.">Git support.</h6>
+<p>–</p>
+<p class="heading" id="check-1"><code>check()</code></p>
+<h6 id="c-support.">C++ support.</h6>
+<h2 id="section">–</h2>
 <h2 id="license">License</h2>
-<pre><code>Copyright © 2021-2022 Yogev Sawa
-
-UNLICENSE
-
-This is free and unencumbered software released into the public domain.
-
-Anyone is free to copy, modify, publish, use, compile, sell, or
-distribute this software, either in source code form or as a compiled
-binary, for any purpose, commercial or non-commercial, and by any
-means.
-
-In jurisdictions that recognize copyright laws, the author or authors
-of this software dedicate any and all copyright interest in the
-software to the public domain. We make this dedication for the benefit
-of the public at large and to the detriment of our heirs and
-successors. We intend this dedication to be an overt act of
-relinquishment in perpetuity of all present and future rights to this
-software under copyright law.
-
-THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
-OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
-ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-OTHER DEALINGS IN THE SOFTWARE.
-
-For more information, please refer to &lt;http://unlicense.org/&gt;</code></pre>
+<h3 id="copyright">Copyright</h3>
+<p>Copyright (C) 2021-2022 Yogev Sawa</p>
+<h3 id="license-1">License</h3>
+<h4 id="unlicense">UNLICENSE</h4>
+<p>This is free and unencumbered software released into the public domain.</p>
+<p>Anyone is free to copy, modify, publish, use, compile, sell, or distribute this software, either in source code form or as a compiled binary, for any purpose, commercial or non-commercial, and by any means.</p>
+<p>In jurisdictions that recognize copyright laws, the author or authors of this software dedicate any and all copyright interest in the software to the public domain. We make this dedication for the benefit of the public at large and to the detriment of our heirs and successors. We intend this dedication to be an overt act of relinquishment in perpetuity of all present and future rights to this software under copyright law.</p>
+<p>THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+<p>For more information, please refer to <a href="http://unlicense.org/" class="uri">http://unlicense.org/</a></p>
 </body>
 </html>
