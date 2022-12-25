@@ -19,13 +19,14 @@
 <h1 id="amend">Amend</h1>
 <p>Source code revision tool.</p>
 <h2 id="description">Description</h2>
-<p>A lot of software is accompanied by additional developer tools to update or check certain features of the source code. This may, for example, include updating a date, such as in the copyright notice. In other examples the developer is required to “grep” through multiple source files to ensure correct order of elements (such as is the case in the <a href="https://www.lua.org">Lua</a> <a href="https://github.com/lua">source code</a>, for example the ‘’OP’’ <a href="https://github.com/lua/lua/blob/master/lopcodes.h">order</a>) — a task fit for automation.</p>
+<p>A lot of software is accompanied by additional developer tools to update or check certain features of the source code. This may, for example, include updating a date, such as in the copyright notice. In other cases the developer is required to “grep” through multiple source files to ensure correct order of elements (such as is the case in the <a href="https://www.lua.org">Lua</a> <a href="https://github.com/lua">source code</a>, for example the ‘’OP’’ <a href="https://github.com/lua/lua/blob/master/lopcodes.h">order</a>) — a task fit for automation.</p>
 <p>The author(s) of ‘’amend’’ have repeatedly reinvented wheels (read utilities) to prepare software releases for each new software they were working on. The ‘’amend’’ package is (a possibly <a href="https://xkcd.com/927/">futile</a>) attempt to create a generic tool for such purposes: yet, the author(s) are using it succesfully in several projects and, therefore, disclose it to the public.</p>
 <h2 id="installation">Installation</h2>
-<p>On systems where symbolic links can be used, a symbolic link to the ‘amend’ command is sufficient. Otherwise the environment variable ‘’AMENDDIR’’ may be set accordingly.</p>
+<p>TODO</p>
+<h2 id="overview">Overview</h2>
+<p>TODO</p>
+<h2 id="examples">Examples</h2>
 <h2 id="api">API</h2>
-<h3 id="version">Version</h3>
-<h4 id="version-1"><code>VERSION</code></h4>
 <h3 id="globals">Globals</h3>
 <p>The following global variables are set or determined at startup:</p>
 <pre><code>  EXECDIR             Path, where &#39;&#39;amend.lua&#39;&#39; was started.
@@ -106,11 +107,8 @@ assert(os.command(&quot;cmake --version&quot;))
 <p class="heading" id="check-1"><code>check()</code></p>
 <h6 id="c-support.">C++ support.</h6>
 <h2 id="section">–</h2>
-<h2 id="license">License</h2>
-<h3 id="copyright">Copyright</h3>
-<p>Copyright (C) 2021-2022 Yogev Sawa</p>
-<h3 id="license-1">License</h3>
-<h4 id="unlicense">UNLICENSE</h4>
+<h4 id="license">License</h4>
+<h5 id="unlicense">UNLICENSE</h5>
 <p>This is free and unencumbered software released into the public domain.</p>
 <p>Anyone is free to copy, modify, publish, use, compile, sell, or distribute this software, either in source code form or as a compiled binary, for any purpose, commercial or non-commercial, and by any means.</p>
 <p>In jurisdictions that recognize copyright laws, the author or authors of this software dedicate any and all copyright interest in the software to the public domain. We make this dedication for the benefit of the public at large and to the detriment of our heirs and successors. We intend this dedication to be an overt act of relinquishment in perpetuity of all present and future rights to this software under copyright law.</p>
