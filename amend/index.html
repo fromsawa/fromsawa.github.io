@@ -17,101 +17,46 @@
 </head>
 <body>
 <h1 id="amend">Amend</h1>
-<p>Source code revision tool.</p>
+<p>A source code revision tool.</p>
 <h2 id="description">Description</h2>
-<p>A lot of software is accompanied by additional developer tools to update or check certain features of the source code. This may, for example, include updating a date, such as in the copyright notice. In other cases the developer is required to “grep” through multiple source files to ensure correct order of elements (such as is the case in the <a href="https://www.lua.org">Lua</a> <a href="https://github.com/lua">source code</a>, for example the ‘’OP’’ <a href="https://github.com/lua/lua/blob/master/lopcodes.h">order</a>) — a task fit for automation.</p>
-<p>The author(s) of ‘’amend’’ have repeatedly reinvented wheels (read utilities) to prepare software releases for each new software they were working on. The ‘’amend’’ package is (a possibly <a href="https://xkcd.com/927/">futile</a>) attempt to create a generic tool for such purposes: yet, the author(s) are using it succesfully in several projects and, therefore, disclose it to the public.</p>
-<h2 id="installation">Installation</h2>
-<p>TODO</p>
+<p>A lot of software is accompanied by additional developer tools to update or check certain features of the source code. This may, for example, include updating a date, such as in the copyright notice. In other cases the developer is required to “grep” through multiple source files to ensure correct order of elements (such as is the case in the <a href="https://www.lua.org">Lua</a> <a href="https://github.com/lua">source code</a>, for example the <code>OP</code> <a href="https://github.com/lua/lua/blob/master/lopcodes.h">order</a>) — a task fit for automation.</p>
+<p>The author(s) of <code>amend</code> have repeatedly reinvented wheels (read utilities) to prepare software releases for each new software they were working on. The <code>amend</code> package is (a possibly <a href="https://xkcd.com/927/">futile</a>) attempt to create a generic tool for such purposes: yet, the author(s) are using it succesfully in several projects and, therefore, disclose it to the public.</p>
 <h2 id="overview">Overview</h2>
-<p>TODO</p>
+<h2 id="quick-start">Quick start</h2>
+<p>To use <code>amend</code> within a project the file <code>.amend/project.lua</code>:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode .lua"><code class="sourceCode lua"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="cn">PROJECT</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>    <span class="cn">NAME</span> <span class="op">=</span> <span class="st">&quot;&lt;project-name&gt;&quot;</span><span class="op">,</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>    <span class="cn">VERSION</span> <span class="op">=</span> <span class="st">&quot;&lt;project-version&gt;&quot;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a><span class="op">}</span></span></code></pre></div>
+<p>must be created (see [amend.api.project.config] for details). After creating this file, it is recommended to run (<code>amend --update</code>) because <code>amend</code> supplements and updates this configuration file if necessary.</p>
+<h2 id="installation">Installation</h2>
+<p>The <code>amend</code> software is intended to be installed either as a sub-module in an existing project or on a per-user basis — and, in fact, the authors do not intend to provide or encourage packaged versions.</p>
+<p>To use <code>amend</code> clone the <a href="https://github.com/fromsawa/amend">repository</a> in your favorite location. On systems that support the <a href="https://en.wikipedia.org/wiki/Shebang_(Unix)#:~:text=In%20computing%2C%20a%20shebang%20is,bang%2C%20or%20hash%2Dpling.">shebang</a> users may add the directory to the <code>PATH</code> environment variable or symbolically link the <code>amend</code> script into an existing <code>PATH</code> directory. Alternatively, a batch script must be created.</p>
+<p><strong>Required packages</strong>:</p>
+<ul>
+<li><a href="https://www.lua.org/download.html">Lua 5.3</a></li>
+<li><a href="https://github.com/lunarmodules/luafilesystem">LuaFileSystem</a></li>
+</ul>
 <h2 id="examples">Examples</h2>
-<h2 id="api">API</h2>
-<h3 id="globals">Globals</h3>
-<p>The following global variables are set or determined at startup:</p>
-<pre><code>  EXECDIR             Path, where &#39;&#39;amend.lua&#39;&#39; was started.
-  ROOTDIR             Project root (where &#39;&#39;.amend/project.lua&#39;&#39; was found).
-  PROJECTFILE         Full path to the &#39;&#39;.amend/project.lua&#39;&#39; file.</code></pre>
-<p>To separate source from other files, the variable</p>
-<pre><code>  IGNORE              Files or directories generally to ignore.</code></pre>
-<p>is populated (regular expressions) at startup. This list is automatically extended if ‘’amend’’ finds the following files, containing wild-card patterns, in the ‘’ROOTDIR’’:</p>
-<pre><code>  .amend/ignore
-  .gitignore</code></pre>
-<p>The project file contains the general configuration variables:</p>
-<pre><code>  PROJECT             Project settings.
-  CONFIG              Amend settings.
-  TOOLS               System tools (see &#39;amend/tools.lua&#39;)
-  PATHS               Additional module paths.</code></pre>
-<p>See [amend.api.project] for details.</p>
-<h3 id="project-configuration">Project configuration</h3>
-<h4 id="projects.">Projects.</h4>
+<h1 id="api">API</h1>
+<h2 id="projects">Projects</h2>
 <p>FIXME</p>
-<h5 id="api-1">API</h5>
-<h6 id="configuration.">Configuration.</h6>
-<p>FIXME</p>
-<h6 id="settings.">Settings.</h6>
-<p>FIXME</p>
-<h6 id="tools.">Tools.</h6>
-<p>FIXME</p>
-<h3 id="components">Components</h3>
-<h4 id="components-1">Components</h4>
-<p>“Amend components” can be created anywhere in the source code tree in a sub-folder “.amend”. The first line of such a component starts with a shebang of the format</p>
-<pre><code>#![indicator]&lt;component-name&gt; [&lt;argument-description&gt;] -- &lt;component-description&gt;</code></pre>
-<p>where the ‘indicator’ is</p>
-<pre><code>*           The component is always executed (even if option &#39;all&#39; is not used).
-_           This defines a &quot;hidden&quot; component (which is only executed as dependency).</code></pre>
-<p>If the <indicator> is omitted, the component behaves like a command and is executed only on explicit request.</p>
-<p>Example:</p>
-<pre><code>#!*check [&lt;arguments&gt;] Check system.
-depends &quot;check-os&quot;
-verbose &quot;Checking system&quot;
+<h3 id="configuration">Configuration</h3>
+<pre><code>Project settings.
 
-assert(os.command(&quot;cmake --version&quot;))
+This table contains two required entries:
 
--- ...</code></pre>
-<h5 id="help"><code>help()</code></h5>
-<h5 id="shebang"><code>shebang()</code></h5>
-<h5 id="scandir"><code>scandir()</code></h5>
-<h5 id="find"><code>find()</code></h5>
-<h5 id="run"><code>_run()</code></h5>
-<h5 id="run-1"><code>run()</code></h5>
-<h5 id="depends-name"><code>depends '&lt;name&gt;'</code></h5>
+    NAME            Project name.
+    VERSION         Project version.
+
+as well as 
+
+    USES            List of tools in use.
+
+Users are free to add additional entries.</code></pre>
+<h3 id="settings">Settings</h3>
+<p>FIXME</p>
 <h3 id="tools">Tools</h3>
-<h4 id="tools.-1">Tools.</h4>
 <p>FIXME</p>
-<h3 id="utilities">Utilities</h3>
-<h4 id="message-logging">Message logging</h4>
-<h5 id="verbose"><code>VERBOSE</code></h5>
-<h5 id="verbosity-levels.">Verbosity levels.</h5>
-<h5 id="error">ERROR</h5>
-<h5 id="warning">WARNING</h5>
-<h5 id="notice">NOTICE</h5>
-<h5 id="status">STATUS</h5>
-<h5 id="info">INFO</h5>
-<h5 id="debug">DEBUG</h5>
-<h5 id="error-1">ERROR</h5>
-<h5 id="message"><code>message()</code></h5>
-<h5 id="verbosity-level"><code>verbosity [{&lt;level&gt;}]</code></h5>
-<h3 id="lua-extensions">Lua extensions</h3>
-<h3 id="tools-1">Tools</h3>
-<h4 id="external-tools.">External tools.</h4>
-<p>FIXME</p>
-<h5 id="cmake-support.">CMake support.</h5>
-<p>–</p>
-<h6 id="parse_argsoptions-one_value_keywords-multi_value_keywords-..."><code>parse_args(options, one_value_keywords, multi_value_keywords, ...)</code></h6>
-<h6 id="updateconfigfile"><code>update(configfile)</code></h6>
-<h6 id="check"><code>check()</code></h6>
-<h5 id="git-support.">Git support.</h5>
-<p>–</p>
-<h6 id="check-1"><code>check()</code></h6>
-<h5 id="c-support.">C++ support.</h5>
-<h2 id="section">–</h2>
-<h4 id="license">License</h4>
-<h5 id="unlicense">UNLICENSE</h5>
-<p>This is free and unencumbered software released into the public domain.</p>
-<p>Anyone is free to copy, modify, publish, use, compile, sell, or distribute this software, either in source code form or as a compiled binary, for any purpose, commercial or non-commercial, and by any means.</p>
-<p>In jurisdictions that recognize copyright laws, the author or authors of this software dedicate any and all copyright interest in the software to the public domain. We make this dedication for the benefit of the public at large and to the detriment of our heirs and successors. We intend this dedication to be an overt act of relinquishment in perpetuity of all present and future rights to this software under copyright law.</p>
-<p>THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
-<p>For more information, please refer to <a href="http://unlicense.org/" class="uri">http://unlicense.org/</a></p>
 </body>
 </html>
