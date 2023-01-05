@@ -44,16 +44,55 @@
 <p>must be created. As <code>amend</code> updates this configuration file each run automatically (based on project and operating system features it can detect), the command <code>amend --update</code> must be run.</p>
 <h3 id="examples">Examples</h3>
 <h4 id="copyright">Copyright</h4>
-<p>TODO</p>
-<h4 id="tools">Tools</h4>
-<p>FIXME</p>
-<h4 id="license">License</h4>
-<h5 id="unlicense">UNLICENSE</h5>
-<p>This is free and unencumbered software released into the public domain.</p>
-<p>Anyone is free to copy, modify, publish, use, compile, sell, or distribute this software, either in source code form or as a compiled binary, for any purpose, commercial or non-commercial, and by any means.</p>
-<p>In jurisdictions that recognize copyright laws, the author or authors of this software dedicate any and all copyright interest in the software to the public domain. We make this dedication for the benefit of the public at large and to the detriment of our heirs and successors. We intend this dedication to be an overt act of relinquishment in perpetuity of all present and future rights to this software under copyright law.</p>
-<p>THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
-<p>For more information, please refer to <a href="http://unlicense.org/" class="uri">http://unlicense.org/</a></p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode .lua"><code class="sourceCode lua"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="kw">local</span> symbol <span class="op">=</span> <span class="st">&quot;(C)&quot;</span> <span class="co">-- copyright symbol</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a><span class="kw">local</span> pattern <span class="op">=</span> <span class="op">{</span><span class="st">&quot;Yogev Sawa&quot;</span><span class="op">}</span> <span class="co">-- author pattern(s)</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a><span class="kw">local</span> year <span class="op">=</span> <span class="fu">tonumber</span><span class="op">(</span><span class="cn">OPTIONS</span><span class="op">[</span><span class="dv">1</span><span class="op">]</span> <span class="kw">or</span> <span class="fu">os.date</span><span class="op">(</span><span class="st">&quot;%Y&quot;</span><span class="op">))</span> <span class="co">-- current year</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a><span class="kw">function</span> fix_copyright<span class="op">(</span>fname<span class="op">)</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a>    <span class="co">-- read file</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a>    <span class="kw">local</span> txt <span class="op">=</span> io<span class="op">.</span>readall<span class="op">(</span>fname<span class="op">)</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a>    <span class="cf">if</span> <span class="kw">not</span> txt <span class="cf">then</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true"></a>        <span class="cf">return</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true"></a>    <span class="cf">end</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true"></a>    <span class="co">-- find and check copyright</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true"></a>    <span class="kw">local</span> bpos<span class="op">,</span> epos<span class="op">,</span> copyright<span class="op">,</span> sym<span class="op">,</span> year_from<span class="op">,</span> year_to<span class="op">,</span> author <span class="op">=</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true"></a>        txt<span class="op">:</span><span class="fu">find</span><span class="op">(</span><span class="st">&quot;(Copyright)[ ]+([^0-9]*)[ ]+([0-9]+)[ ]*[%-]-[ ]*([0-9]*)[ ]+([^</span><span class="sc">\n</span><span class="st">]+)&quot;</span><span class="op">)</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true"></a></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true"></a>    <span class="co">-- edit files (if applicable)</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true"></a>    <span class="cf">if</span> table<span class="op">.</span>has<span class="op">(</span>pattern<span class="op">,</span> author<span class="op">)</span> <span class="cf">then</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true"></a>        year_from <span class="op">=</span> <span class="fu">tonumber</span><span class="op">(</span>year_from<span class="op">)</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true"></a>        year_to <span class="op">=</span> <span class="fu">tonumber</span><span class="op">(</span>year_to<span class="op">)</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true"></a></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true"></a>        <span class="cf">if</span> <span class="op">((</span>year_to <span class="kw">or</span> year_from<span class="op">)</span> <span class="op">~=</span> year<span class="op">)</span> <span class="kw">or</span> <span class="op">(</span>sym <span class="op">~=</span> symbol<span class="op">)</span> <span class="cf">then</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true"></a>            <span class="kw">local</span> years <span class="op">=</span> <span class="fu">string.format</span><span class="op">(</span><span class="st">&quot;%d&quot;</span><span class="op">,</span> year<span class="op">)</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true"></a>            <span class="cf">if</span> year_from <span class="op">~=</span> year <span class="cf">then</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true"></a>                years <span class="op">=</span> <span class="fu">string.format</span><span class="op">(</span><span class="st">&quot;%d-%d&quot;</span><span class="op">,</span> year_from<span class="op">,</span> year<span class="op">)</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true"></a>            <span class="cf">end</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true"></a>            message<span class="op">(</span><span class="cn">STATUS</span><span class="op">,</span> <span class="st">&quot;    updating %s&quot;</span><span class="op">,</span> fname<span class="op">)</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true"></a></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true"></a>            <span class="kw">local</span> before<span class="op">,</span> after <span class="op">=</span> txt<span class="op">:</span><span class="fu">sub</span><span class="op">(</span><span class="dv">1</span><span class="op">,</span> bpos <span class="op">-</span> <span class="dv">1</span><span class="op">),</span> txt<span class="op">:</span><span class="fu">sub</span><span class="op">(</span>epos <span class="op">+</span> <span class="dv">1</span><span class="op">,</span> <span class="op">-</span><span class="dv">1</span><span class="op">)</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true"></a>            <span class="kw">local</span> newcopyright <span class="op">=</span> <span class="fu">string.format</span><span class="op">(</span><span class="st">&quot;%s %s %s %s&quot;</span><span class="op">,</span> copyright<span class="op">,</span> symbol<span class="op">,</span> years<span class="op">,</span> author<span class="op">)</span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true"></a></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true"></a>            f <span class="op">=</span> <span class="fu">assert</span><span class="op">(</span><span class="fu">io.open</span><span class="op">(</span>fname<span class="op">,</span> <span class="st">&quot;w&quot;</span><span class="op">))</span></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true"></a>            f<span class="op">:</span><span class="fu">write</span><span class="op">(</span>before<span class="op">,</span> newcopyright<span class="op">,</span> after<span class="op">)</span></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true"></a>            f<span class="op">:</span><span class="fu">close</span><span class="op">()</span></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true"></a>        <span class="cf">end</span></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true"></a>    <span class="cf">end</span></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true"></a><span class="kw">end</span></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true"></a></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true"></a>fs<span class="op">.</span>dodir<span class="op">(</span></span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true"></a>    <span class="st">&quot;.&quot;</span><span class="op">,</span></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true"></a>    <span class="kw">function</span><span class="op">(</span>item<span class="op">)</span></span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true"></a>        fix_copyright<span class="op">(</span>item<span class="op">[</span><span class="dv">0</span><span class="op">])</span></span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true"></a>    <span class="kw">end</span><span class="op">,</span></span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true"></a>    <span class="op">{</span></span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true"></a>        exclude <span class="op">=</span> <span class="cn">IGNORE</span><span class="op">,</span></span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true"></a>        extension <span class="op">=</span> <span class="op">{</span><span class="st">&quot;.lua&quot;</span><span class="op">,</span> <span class="st">&quot;.cmake&quot;</span><span class="op">,</span> <span class="st">&quot;.md&quot;</span><span class="op">},</span></span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true"></a>        include <span class="op">=</span> <span class="op">{},</span></span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true"></a>        recurse <span class="op">=</span> <span class="kw">true</span></span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true"></a>    <span class="op">}</span></span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true"></a><span class="op">)</span></span></code></pre></div>
 <h1 id="api">API</h1>
 <h2 id="components">Components</h2>
 <p>“Amend components” can be created anywhere in the source code tree in a sub-folder “.amend”. The first line of such a component starts with a shebang of the format</p>
@@ -70,151 +109,257 @@ verbose &quot;Checking system&quot;
 assert(os.command(&quot;cmake --version&quot;))
 
 -- ...</code></pre>
-<h3 id="help">⎔ <code>help()</code></h3>
-<h3 id="shebang">⎔ <code>shebang()</code></h3>
-<h3 id="scandir">⎔ <code>scandir()</code></h3>
-<h3 id="find">⎔ <code>find()</code></h3>
-<h3 id="run">⎔ <code>_run()</code></h3>
-<h3 id="run-1">⎔ <code>run()</code></h3>
-<h3 id="depends-name">⎔ <code>depends '&lt;name&gt;'</code></h3>
+<h3 id="help"><code>help()</code></h3>
+<p>Print components help.</p>
+<h3 id="shebang"><code>shebang()</code></h3>
+<p>Get parsed “shebang” from file.</p>
+<h3 id="scandir"><code>scandir()</code></h3>
+<p>Scan users ‘.amend’ dir.</p>
+<h3 id="find"><code>find()</code></h3>
+<p>Find all components in the project tree.</p>
+<h3 id="run"><code>_run()</code></h3>
+<p>Run the component (if not yet done)</p>
+<h3 id="run-1"><code>run()</code></h3>
+<p>Run a “component”.</p>
+<h3 id="depends-name"><code>depends '&lt;name&gt;'</code></h3>
+<p>Include a dependecy.</p>
 <p>The following global variables are set or determined at startup:</p>
-<pre><code>  EXECDIR             Path, where &#39;&#39;amend.lua&#39;&#39; was started.
-  ROOTDIR             Project root (where &#39;&#39;.amend/project.lua&#39;&#39; was found).
-  PROJECTFILE         Full path to the &#39;&#39;.amend/project.lua&#39;&#39; file.</code></pre>
+<pre><code> EXECDIR             Path, where &#39;&#39;amend.lua&#39;&#39; was started.
+ ROOTDIR             Project root (where &#39;&#39;.amend/project.lua&#39;&#39; was found).
+ PROJECTFILE         Full path to the &#39;&#39;.amend/project.lua&#39;&#39; file.</code></pre>
 <p>To separate source from other files, the variable</p>
-<pre><code>  IGNORE              Files or directories generally to ignore.</code></pre>
+<pre><code> IGNORE              Files or directories generally to ignore.</code></pre>
 <p>is populated (regular expressions) at startup. This list is automatically extended if ‘’amend’’ finds the following files, containing wild-card patterns, in the ‘’ROOTDIR’’:</p>
-<pre><code>  .amend/ignore
-  .gitignore</code></pre>
+<pre><code> .amend/ignore
+ .gitignore</code></pre>
 <p>The project file contains the general configuration variables:</p>
-<pre><code>  PROJECT             Project settings.
-  CONFIG              Amend settings.
-  TOOLS               System tools (see &#39;amend/tools.lua&#39;)
-  PATHS               Additional module paths.</code></pre>
+<pre><code> PROJECT             Project settings.
+ CONFIG              Amend settings.
+ TOOLS               System tools (see &#39;amend/tools.lua&#39;)
+ PATHS               Additional module paths.</code></pre>
 <p>See [amend.api.project] for details.</p>
 <h2 id="message-logging">Message logging</h2>
-<h3 id="verbose">⎔ <code>VERBOSE</code></h3>
-<h3 id="verbosity-levels">⎔ Verbosity levels</h3>
-<h3 id="error">⎔ ERROR</h3>
-<h3 id="warning">⎔ WARNING</h3>
-<h3 id="notice">⎔ NOTICE</h3>
-<h3 id="status">⎔ STATUS</h3>
-<h3 id="info">⎔ INFO</h3>
-<h3 id="debug">⎔ DEBUG</h3>
-<h3 id="error-1">⎔ ERROR</h3>
-<h3 id="message">⎔ <code>message()</code></h3>
-<h3 id="verbosity-level">⎔ <code>verbosity [{&lt;level&gt;}]</code></h3>
+<h3 id="verbose"><code>VERBOSE</code></h3>
+<p>Default verbosity level.</p>
+<h3 id="verbosity-levels">Verbosity levels</h3>
+<ul>
+<li>ERROR</li>
+</ul>
+<h3 id="warning">WARNING</h3>
+<h3 id="notice">NOTICE</h3>
+<h3 id="status">STATUS</h3>
+<h3 id="info">INFO</h3>
+<h3 id="debug">DEBUG</h3>
+<h3 id="error">ERROR</h3>
+<h3 id="message"><code>message()</code></h3>
+<p><span class="citation" data-cites="call">@call</span> <code>message [{&lt;level&gt;}] "&lt;text&gt;"</code> <code>message(&lt;level&gt;|&lt;level-name&gt;, "&lt;text&gt;", ...)</code></p>
+<p>Emit an informational message.</p>
+<p><span class="citation" data-cites="param">@param</span> FIXME</p>
+<h3 id="verbosity-level"><code>verbosity [{&lt;level&gt;}]</code></h3>
+<p>Set verbose level.</p>
 <h2 id="lua-extensions">Lua extensions</h2>
 <h3 id="classes">Classes</h3>
 <p>FIXME</p>
-<h4 id="class.tag">⎔ <code>class.tag</code></h4>
-<h4 id="void">⎔ <code>void</code></h4>
-<h4 id="isvoidt">⎔ <code>isvoid(t)</code></h4>
-<h4 id="isclasst">⎔ <code>isclass(t)</code></h4>
-<h4 id="isobjectt">⎔ <code>isobject(t)</code></h4>
-<h4 id="resolve...">⎔ <code>resolve(...)</code></h4>
-<h4 id="isaobj-...">⎔ <code>isa(obj, ...)</code></h4>
-<h4 id="newindex">⎔ <code>newindex</code></h4>
-<h4 id="class-name-declaration">⎔ <code>class "name" { &lt;declaration&gt; }</code></h4>
-<h4 id="indextk">⎔ <code>index(t,k)</code></h4>
+<h4 id="class.tag"><code>class.tag</code></h4>
+<p>This class tag serves two purposes, first to mark a table as ‘class’ and second, provides the meta-method ’’__call’’ for class instatiation.</p>
+<h4 id="void"><code>void</code></h4>
+<p>A place-holder (for ’’__public’’ fields).</p>
+<h4 id="isvoidt"><code>isvoid(t)</code></h4>
+<p>Check if ‘’t’’ is <code>void</code>.</p>
+<h4 id="isclasst"><code>isclass(t)</code></h4>
+<p>Check if ‘’t’’ is a <code>class</code>.</p>
+<h4 id="isobjectt"><code>isobject(t)</code></h4>
+<p>Check if ‘’t’’ is an object.</p>
+<h4 id="resolve..."><code>resolve(...)</code></h4>
+<p><span class="citation" data-cites="call">@call</span> <code>resolve(name)</code> <code>resolve(name, root)</code> <span class="citation" data-cites="param">@param</span> name The class name. root The root namespace (default: _G)</p>
+<p>Find a class by name.</p>
+<h4 id="isaobj-..."><code>isa(obj, ...)</code></h4>
+<p><span class="citation" data-cites="call">@call</span> <code>isa(obj, T)</code></p>
+<p>Check if ‘’obj’’ is of type ‘’T’‘. Here,’‘T’’ may also be a string as it would be returned by <code>type()</code> or <code>math.type()</code>.</p>
+<p><span class="citation" data-cites="call">@call</span> <code>isa(obj, {T})</code></p>
+<p>Check if ‘’obj’’ is or is derived from type ‘’T’‘. This requires’‘obj’’ to be an object (see [amend.api.lua.class.isobject]).</p>
+<h4 id="newindex"><code>newindex</code></h4>
+<p>Standard ’’__newindex’’ meta-method for classes.</p>
+<h4 id="class-name-declaration"><code>class "name" { &lt;declaration&gt; }</code></h4>
+<p>FIXME</p>
+<h4 id="indextk"><code>index(t,k)</code></h4>
+<p>Retrieve index <code>k</code> from table <code>t</code> in the same way, standard ’’__index’’ does it, however, using ‘rawget’ internally.</p>
 <h3 id="io-library-extensions">IO-library extensions</h3>
-<h4 id="io.printf...">⎔ <code>io.printf(...)</code></h4>
-<h4 id="io.dumpvalue-options">⎔ <code>io.dump(value, options)</code></h4>
-<h4 id="io.readallfname">⎔ <code>io.readall(fname)</code></h4>
-<h4 id="io.commandprogram-...">⎔ <code>io.command(program, ...)</code></h4>
+<h4 id="io.printf..."><code>io.printf(...)</code></h4>
+<p>Equivalent to C’s ‘’printf’’</p>
+<h4 id="io.dumpvalue-options"><code>io.dump(value, options)</code></h4>
+<p>Dump value. <span class="citation" data-cites="param">@param</span> value Value to stream to output. options [optional] Display options.</p>
+<p>This function dumps value to an output stream.</p>
+<p>The ‘’options’’ is a table, that may contain the following fields:</p>
+<pre><code> stream          Output stream (default: io.stdout).
+ file            Output file name.
+ indent          Indentation string.
+ level           Indentation level.
+ key             Table key.
+ prefix          Prefix for output (usually only for adding a &quot;return&quot; statement).
+ quoted          Always output keys in the [&quot;quoted&quot;] format (default: false)</code></pre>
+<h4 id="io.readallfname"><code>io.readall(fname)</code></h4>
+<p>Read file. <span class="citation" data-cites="param">@param</span> fname The file name. <span class="citation" data-cites="returns">@returns</span> text, error</p>
+<h4 id="io.commandprogram-..."><code>io.command(program, ...)</code></h4>
+<p>Execute command and read output. <span class="citation" data-cites="param">@param</span> program The command to execute (as format string). … Format options. <span class="citation" data-cites="returns">@returns</span> output,error FIXME</p>
 <h3 id="os-library-extensions">OS-library extensions</h3>
-<h4 id="os.commandprogram-...">⎔ <code>os.command(program, ...)</code></h4>
+<h4 id="os.commandprogram-..."><code>os.command(program, ...)</code></h4>
+<p>Execute a command.</p>
 <h3 id="package"><code>package</code></h3>
 <p><span class="citation" data-cites="note">@note</span> In addition to standard <a href="https://github.com/lua/lua/blob/master/luaconf.h">Lua</a> conventions, here, also the /?/__init.lua/ file is searched.</p>
-<h4 id="packageaddpathpath">⎔ <code>package:addpath(path)</code></h4>
-<h4 id="packagepushpathpath">⎔ <code>package:pushpath(path)</code></h4>
-<h4 id="packagepoppath">⎔ <code>package:poppath()</code></h4>
-<h4 id="remove-previously-added-script-search-path">⎔ Remove previously added script search path</h4>
+<h4 id="packageaddpathpath"><code>package:addpath(path)</code></h4>
+<p>Add search directory to script search path.</p>
+<h4 id="packagepushpathpath"><code>package:pushpath(path)</code></h4>
+<p>Temporarily add a script search path.</p>
+<h4 id="packagepoppath"><code>package:poppath()</code></h4>
+<p>Remove previously added script search path.</p>
 <h3 id="string-library-extensions">String library extensions</h3>
-<h4 id="string.anys-tbl-exact">⎔ <code>string.any(s, tbl, exact)</code></h4>
-<h4 id="string.trims">⎔ <code>string.trim(s)</code></h4>
-<h4 id="string.titles">⎔ <code>string.title(s)</code></h4>
-<h4 id="string.untitles">⎔ <code>string.untitle(s)</code></h4>
-<h4 id="stringsplitsseparator-nmax-bregexp">⎔ <code>string:split(sSeparator, nMax, bRegexp)</code></h4>
-<h4 id="string.wraps-col">⎔ <code>string.wrap(s, col)</code></h4>
+<h4 id="string.anys-tbl-exact"><code>string.any(s, tbl, exact)</code></h4>
+<p>Match elements from a table.</p>
+<p><span class="citation" data-cites="param">@param</span> s The string. tbl Table with regex-patterns. exact [optional] Boolean value indicating if matching must be exact. ??? FIXME what does this mean ???</p>
+<p><span class="citation" data-cites="returns">@returns</span> Matched string, otherwise ‘’nil’’.</p>
+<h4 id="string.trims"><code>string.trim(s)</code></h4>
+<p>Trim string.</p>
+<h4 id="string.titles"><code>string.title(s)</code></h4>
+<p>Make string “titlecase”.</p>
+<h4 id="string.untitles"><code>string.untitle(s)</code></h4>
+<p>Undo “titlecase”.</p>
+<h4 id="stringsplitsseparator-nmax-bregexp"><code>string:split(sSeparator, nMax, bRegexp)</code></h4>
+<p>String split. See http://lua-users.org/wiki/SplitJoin</p>
+<h4 id="string.wraps-col"><code>string.wrap(s, col)</code></h4>
+<p>Wrap string (each line is detected as a paragraph) to specified column-width.</p>
 <h3 id="table-library-extensions">Table library extensions</h3>
-<h4 id="table.hastbl-item">⎔ <code>table.has(tbl, item)</code></h4>
-<h4 id="table.kpairstbl">⎔ <code>table.kpairs(tbl)</code></h4>
-<h4 id="table.counttbl">⎔ <code>table.count(tbl)</code></h4>
-<h4 id="table.hinttbl">⎔ <code>table.hint(tbl)</code></h4>
-<h4 id="table.toptbl-idx">⎔ <code>table.top(tbl, idx)</code></h4>
-<h4 id="table.copytbl">⎔ <code>table.copy(tbl)</code></h4>
-<h4 id="table.merget-other">⎔ <code>table.merge(t, other)</code></h4>
-<h4 id="table.make...">⎔ <code>table.make(...)</code></h4>
-<h4 id="table.uniquet">⎔ <code>table.unique(t)</code></h4>
-<h4 id="table.insert_uniquet-v">⎔ <code>table.insert_unique(t, v)</code></h4>
+<h4 id="table.hastbl-item"><code>table.has(tbl, item)</code></h4>
+<p>Check if array-part of a table has an element. <span class="citation" data-cites="param">@param</span> tbl The table to check. item The item.</p>
+<h4 id="table.kpairstbl"><code>table.kpairs(tbl)</code></h4>
+<p>Key-only table iterator. This function ignores integer-valued keys.</p>
+<h4 id="table.counttbl"><code>table.count(tbl)</code></h4>
+<p>Count all keys in a table.</p>
+<h4 id="table.hinttbl"><code>table.hint(tbl)</code></h4>
+<p>Get/set “hint” table. FIXME</p>
+<h4 id="table.toptbl-idx"><code>table.top(tbl, idx)</code></h4>
+<p>Get array items from top</p>
+<h4 id="table.copytbl"><code>table.copy(tbl)</code></h4>
+<p>Create a table copy.</p>
+<h4 id="table.merget-other"><code>table.merge(t, other)</code></h4>
+<p>Merge another table into ‘’t’’</p>
+<h4 id="table.make..."><code>table.make(...)</code></h4>
+<p>Create a new table from many.</p>
+<h4 id="table.uniquet"><code>table.unique(t)</code></h4>
+<p>Make array elements unique.</p>
+<h4 id="table.insert_uniquet-v"><code>table.insert_unique(t, v)</code></h4>
+<p>Add a unique value.</p>
 <h2 id="projects">Projects</h2>
 <p>FIXME</p>
 <h3 id="configuration">Configuration</h3>
-<pre><code>Project settings.
-
-This table contains two required entries:
-
-    NAME            Project name.
-    VERSION         Project version.
-
-as well as 
-
-    USES            List of tools in use.
-
-Users are free to add additional entries.</code></pre>
+<p>Project settings.</p>
+<p>This table contains two required entries:</p>
+<pre><code>NAME            Project name.
+VERSION         Project version.</code></pre>
+<p>as well as</p>
+<pre><code>USES            List of tools in use.</code></pre>
+<p>Users are free to add additional entries.</p>
 <h3 id="settings">Settings</h3>
 <p>FIXME</p>
-<h3 id="tools-1">Tools</h3>
+<h3 id="tools">Tools</h3>
 <p>FIXME</p>
 <h2 id="external-tools">External tools</h2>
 <p>FIXME</p>
 <h3 id="cmake-support">CMake support</h3>
 <p>–</p>
-<h4 id="parse_argsoptions-one_value_keywords-multi_value_keywords-...">⎔ <code>parse_args(options, one_value_keywords, multi_value_keywords, ...)</code></h4>
-<h4 id="updateconfigfile">⎔ <code>update(configfile)</code></h4>
-<h4 id="check">⎔ <code>check()</code></h4>
-<h3 id="c-support">C support</h3>
+<h4 id="parse_argsoptions-one_value_keywords-multi_value_keywords-..."><code>parse_args(options, one_value_keywords, multi_value_keywords, ...)</code></h4>
+<h4 id="updateconfigfile"><code>update(configfile)</code></h4>
+<p>Update PROJECT configuration.</p>
+<h4 id="check"><code>check()</code></h4>
+<p>FIXME</p>
+<h3 id="git-support">Git support</h3>
 <p>–</p>
-<h3 id="c-support-1">C++ support</h3>
+<h4 id="check-1"><code>check()</code></h4>
+<p>Check if project uses git and update PROJECT settings.</p>
+<h3 id="c-support">C++ support</h3>
 <h2 id="section">–</h2>
-<h2 id="csv-file-tools">CSV-file tools</h2>
-<h3 id="csv.loadfname-opts">⎔ <code>csv.load(fname, [opts])</code></h3>
-<h2 id="editing">Editing</h2>
+<h2 id="utilities">Utilities</h2>
+<h3 id="extensions-to-luafilesystem">Extensions to LuaFileSystem</h3>
+<h4 id="fs.existsfilename"><code>fs.exists(filename)</code></h4>
+<p>Check if file exists. <span class="citation" data-cites="param">@param</span> filename Path or file-name to check. <span class="citation" data-cites="returns">@returns</span> ‘’true’’ if file or path exists, ‘’false’’ otherwise.</p>
+<h4 id="fs.isnewerfile-another"><code>fs.isnewer(file, another)</code></h4>
+<p>Check if a ‘’file’’ is newer than ‘’another’‘. <span class="citation" data-cites="returns">@returns</span>’‘nil’’ if <code>file</code> does not exist, ‘’true’’ if <code>file</code> is newer or <code>another</code> does not exist, ‘’false’’ otherwise.</p>
+<h4 id="fs.anynewerfile-..."><code>fs.anynewer(file, ...)</code></h4>
+<p>Check if any other file is newer than <code>file</code>.</p>
+<p>FIXME</p>
+<h4 id="fs.concat..."><code>fs.concat(...)</code></h4>
+<p>Concatenate path elements. <span class="citation" data-cites="param">@param</span> … List of path elements. <span class="citation" data-cites="returns">@returns</span> Concatenated path elements using builtin directory seperator.</p>
+<h4 id="fs.partsfname"><code>fs.parts(fname)</code></h4>
+<p>Get parts of a file name (path, file and extension). <span class="citation" data-cites="param">@param</span> fname The file- or path-name. <span class="citation" data-cites="returns">@returns</span> <path>,<file-name>,<extension></p>
+<h4 id="fs.relpathpath-root"><code>fs.relpath(path, root)</code></h4>
+<p>Get relative path with respect to a “root”. <span class="citation" data-cites="param">@param</span> path The ‘path’ to split. root [optional] The root path. <span class="citation" data-cites="returns">@returns</span> <relative-path></p>
+<h4 id="fs.readwildfile-tbl"><code>fs.readwild(file, tbl)</code></h4>
+<p>Read a wildcard pattern file. <span class="citation" data-cites="param">@param</span> file The file name (containing wildcard patterns and comments). tbl [optional] Existing table (with regex patterns).</p>
+<h4 id="fs.dodirpath-callback-options"><code>fs.dodir(path, callback, options)</code></h4>
+<p>Execute a function for each directory element possibly recursively. <span class="citation" data-cites="param">@param</span> path The path to iterate over. callback Callback function for elements (must return true for recursion). options [optional] Options.</p>
+<p>This function executes the <code>callback</code> for each element in the alpha-numerically sorted directory list. Arguments passed to the callback are:</p>
+<pre><code> [0]     Full path to file.
+ [1]     The directory part.
+ [2]     The file name part.
+ [3]     The file extension.
+ attr    The attribute table as returned by `symlinkattributes`.
+ options The options table (from the arguments).</code></pre>
+<p>The callback may return a boolean value overriding option ‘’recurse’’.</p>
+<p>Options: exclude List of regex-patterns of files or directories to ignore (default: {‘[.]’, ‘[.][.]’}). include List of regex-patterns of files or directories to include (overrides ‘exclude’). directories Additional directories to search. extension Only report files or directories matching list of given extensions. mode File type (<code>mode</code> field of <code>attributes()</code> function). follow Follow symbolic links (default: false) recurse Enable directory recursion (default: false). depth Directory depth (default: 0)</p>
+<h4 id="fs.pushddir"><code>fs.pushd(dir)</code></h4>
+<p>“Push” directory.</p>
+<p>Equivalent of shell command ‘’pushd’’.</p>
+<h4 id="fs.popd"><code>fs.popd()</code></h4>
+<p>“Pop” directory.</p>
+<p>Equivalent of shell command ‘’popd’’.</p>
+<h4 id="fs.rmkdirfpath"><code>fs.rmkdir(fpath)</code></h4>
+<p>Recursively create directory. <span class="citation" data-cites="param">@param</span> fpath The directory-path to create. <span class="citation" data-cites="returns">@returns</span> <status>[, <error-message>] The value of LuaFilesystem’s <a href="https://keplerproject.github.io/luafilesystem/manual.html#mkdir">mkdir</a> command.</p>
+<h4 id="fs.grepfname-pattern"><code>fs.grep(fname, pattern)</code></h4>
+<p>Grep-like matching</p>
+<h4 id="fs.filetypefname"><code>fs.filetype(fname)</code></h4>
+<p>Get file type (from extension). FIXME</p>
+<h4 id="fs.whichexecutable"><code>fs.which(executable)</code></h4>
+<p>Get full path to an executable.</p>
+<h4 id="fs.touch..."><code>fs.touch(...)</code></h4>
+<p><span class="citation" data-cites="args">@args</span> files… File names to touch. [options] Options (last argument).</p>
+<p>Touch all files, ensuring same access and modification time.</p>
+<p>FIXME options</p>
+<h4 id="fs.fullpathpath"><code>fs.fullpath(path)</code></h4>
+<p>Retrieve full path of a possibly relative <code>path</code>.</p>
+<h3 id="editing">Editing</h3>
 <p>Amend provides several utilities for editing files.</p>
-<h3 id="clear">⎔ <code>clear()</code></h3>
-<h3 id="addlncode-...">⎔ <code>addln(code, ...)</code></h3>
-<h3 id="addcode-...">⎔ <code>add(code, ...)</code></h3>
-<h3 id="sedpattern-replace">⎔ <code>sed(pattern, replace)</code></h3>
-<h3 id="writestream">⎔ <code>write(stream)</code></h3>
-<h3 id="section-1">⎔ <strong>section</strong><code>()</code></h3>
-<h3 id="parsepath">⎔ <code>parse(path)</code></h3>
-<h3 id="update">⎔ <code>update()</code></h3>
-<h3 id="sedpattern-replace-1">⎔ <code>sed(pattern, replace)</code></h3>
-<h3 id="edit.filefname">⎔ <code>edit.file(fname)</code></h3>
-<h2 id="extensions-to-luafilesystem">Extensions to LuaFileSystem</h2>
-<h3 id="fs.existsfilename">⎔ <code>fs.exists(filename)</code></h3>
-<h3 id="fs.isnewerfile-another">⎔ <code>fs.isnewer(file, another)</code></h3>
-<h3 id="fs.anynewerfile-...">⎔ <code>fs.anynewer(file, ...)</code></h3>
-<h3 id="fs.concat...">⎔ <code>fs.concat(...)</code></h3>
-<h3 id="fs.partsfname">⎔ <code>fs.parts(fname)</code></h3>
-<h3 id="fs.relpathpath-root">⎔ <code>fs.relpath(path, root)</code></h3>
-<h3 id="fs.readwildfile-tbl">⎔ <code>fs.readwild(file, tbl)</code></h3>
-<h3 id="fs.dodirpath-callback-options">⎔ <code>fs.dodir(path, callback, options)</code></h3>
-<h3 id="fs.pushddir">⎔ <code>fs.pushd(dir)</code></h3>
-<h3 id="fs.popd">⎔ <code>fs.popd()</code></h3>
-<h3 id="fs.rmkdirfpath">⎔ <code>fs.rmkdir(fpath)</code></h3>
-<h3 id="fs.grepfname-pattern">⎔ <code>fs.grep(fname, pattern)</code></h3>
-<h3 id="fs.filetypefname">⎔ <code>fs.filetype(fname)</code></h3>
-<h3 id="fs.whichexecutable">⎔ <code>fs.which(executable)</code></h3>
-<h3 id="fs.touch...">⎔ <code>fs.touch(...)</code></h3>
-<h3 id="fs.fullpathpath">⎔ <code>fs.fullpath(path)</code></h3>
-<h2 id="readable">ReaDaBLe</h2>
+<h4 id="clear"><code>clear()</code></h4>
+<p>Clear contents.</p>
+<h4 id="addlncode-..."><code>addln(code, ...)</code></h4>
+<p>Add a code line.</p>
+<h4 id="addcode-..."><code>add(code, ...)</code></h4>
+<p>Add code to current line.</p>
+<h4 id="sedpattern-replace"><code>sed(pattern, replace)</code></h4>
+<p>In-place sed.</p>
+<h4 id="writestream"><code>write(stream)</code></h4>
+<p>Write section to a stream.</p>
+<h4 id="section-1"><strong>section</strong><code>()</code></h4>
+<p>Constructor.</p>
+<h4 id="parsepath"><code>parse(path)</code></h4>
+<p>Parse file (into sections)</p>
+<h4 id="update"><code>update()</code></h4>
+<p>Update file.</p>
+<h4 id="sedpattern-replace-1"><code>sed(pattern, replace)</code></h4>
+<p>In-place sed.</p>
+<h4 id="edit.filefname"><code>edit.file(fname)</code></h4>
+<p>Edit a file.</p>
+<p>FIXME</p>
+<h3 id="csv-file-tools">CSV-file tools</h3>
+<h4 id="csv.loadfname-opts"><code>csv.load(fname, [opts])</code></h4>
+<p>Read a CSV file. <span class="citation" data-cites="param">@param</span> fname File name. opts Options.</p>
+<p>Options: &gt; { &gt; comment = ‘<pattern>’, &gt; separator = ‘separator’, &gt; columns = { <column-names-list> },<br />
+&gt; filter = <item-filter-function> &gt; }</p>
+<h3 id="readable">ReaDaBLe</h3>
 <p>Configuration files suck - yet they are invaluable. They are especially valuable if they are <em>indeed</em> human readable and possibly even grep’able (oh yes, the good ol’ days of text-only files).</p>
 <p>There are a number of good syntaxes, that provide sensible approaches - note, under the precondition of structured and hierarchical representation of data. Most of them, however, do either not follow the <a href="https://www.urbandictionary.com/define.php?term=KISS%20principle">KISS principle</a>, are hardly human readable (without an IDE), or, simply lack the possibility of annotations (read: comments).</p>
 <p>Well, you heard it, YAML to the rescue: yes, but <a href="noyaml.com">No thanks!</a>.@footnote The author does recognize the ideas behind YAML. He also wants to express, that alternatives, such as XML or JSON, have their merit.</p>
 <p>RDBL provides a <a href="https://xkcd.com/927/">simple sub-set</a> of YAML, is easy to parse and consitent.</p>
-<h3 id="format">Format</h3>
+<h4 id="format">Format</h4>
 <p>The typical structure of an RDBL document is:</p>
 <pre><code># A comment.
 🗎
@@ -224,12 +369,12 @@ another:
     # sequence
     - a: 1
     - b: 2</code></pre>
-<h4 id="general">General</h4>
-<h5 id="documents">Documents</h5>
+<h5 id="general">General</h5>
+<h6 id="documents">Documents</h6>
 <p>RDBL files contain at least one document. A document starts with</p>
 <pre><code>🗎 document-name</code></pre>
 <p>where the ‘document-name’ is optional. If YAML compatibility is required (default in v0.0), the document marker is “—”.</p>
-<h5 id="hierarchy">Hierarchy</h5>
+<h6 id="hierarchy">Hierarchy</h6>
 <p>Hierarchical order is defined by indentation. The document must always use the same indentation, consisting of number of spaces (default: 4).</p>
 <p>Tab characters (ASCII 0x09) are not allowed.</p>
 <p>Elements are organized in sequences (starting with a dash) and (unordered) maps. ::footnote Note, that the export of maps will list their keys sorted (unless an implementation chooses to support an “ORDER” tag).</p>
@@ -243,12 +388,12 @@ another:
 <pre><code>key:
 key: value</code></pre>
 <p>FIXME</p>
-<h5 id="comments">Comments</h5>
+<h6 id="comments">Comments</h6>
 <p>RDBL files may be commented using the number sign or hash (#). Comments may only appear prior to an entry using identical indentation, otherwise, the ‘#’ is recognized as a normal character.</p>
-<h5 id="keys">Keys</h5>
+<h6 id="keys">Keys</h6>
 <p>RDBL only allows integral or character literals as keys. Other types, such as floating-point values or boolean types will not be supported, as these are not generally unambiguous.</p>
-<h5 id="value-types">Value types</h5>
-<h6 id="string">‘’string’’</h6>
+<h6 id="value-types">Value types</h6>
+<p class="heading" id="string">‘’string’’</p>
 <pre><code>Character sequences are represented in three forms:
 
 1. character literals (unquoted, may contain spaces),
@@ -265,15 +410,15 @@ Example:
                 retain
                     their
                 indentation</code></pre>
-<h6 id="integer">‘’integer’’</h6>
+<p class="heading" id="integer">‘’integer’’</p>
 <pre><code>When using integral types (including binary, octal and hexadecimal representation), care
 has to be taken, that the target system reading the data does support their size.</code></pre>
-<h6 id="float">‘’float’’</h6>
+<p class="heading" id="float">‘’float’’</p>
 <pre><code>Floating-point values are supported in scientific notation (e.g. &quot;1.0E-3&quot;). Infinity
 is represented as &quot;∞&quot; or &quot;inf&quot;. For unrepresentable floats, &quot;NaN&quot; (any case) is used.</code></pre>
-<h6 id="array">‘’array’’</h6>
+<p class="heading" id="array">‘’array’’</p>
 <pre><code>Arrays may be represented by a comma-separated list of values enclosed in braces.</code></pre>
-<h6 id="user-types">user-types</h6>
+<p class="heading" id="user-types">user-types</p>
 <pre><code>Implementations may choose to support other types by supplying a dictionary
 or translation function.
 
@@ -290,38 +435,70 @@ table of the format
     }
 
 may be provided to the `import` function.</code></pre>
-<h3 id="api-1">API</h3>
-<h4 id="types">Types</h4>
+<h4 id="api-1">API</h4>
+<h5 id="types">Types</h5>
 <p>FIXME</p>
-<h5 id="order">⎔ <code>ORDER</code></h5>
-<h5 id="null">⎔ <code>NULL</code></h5>
-<h5 id="isnull">⎔ <code>isnull</code></h5>
-<h5 id="isinteger">⎔ <code>isinteger</code></h5>
-<h5 id="typeof">⎔ <code>typeof</code></h5>
-<h5 id="escape">⎔ <code>escape()</code></h5>
-<h5 id="unescape">⎔ <code>unescape</code></h5>
-<h5 id="getkeys">⎔ <code>getkeys()</code></h5>
-<h5 id="tovalue">⎔ <code>tovalue()</code></h5>
-<h5 id="toliteral">⎔ <code>toliteral()</code></h5>
-<h5 id="tokey">⎔ <code>tokey()</code></h5>
-<h4 id="importing">Importing</h4>
+<h6 id="order"><code>ORDER</code></h6>
+<p>Element order.</p>
 <p>FIXME</p>
-<h5 id="isdocument">⎔ <code>isdocument()</code></h5>
-<h5 id="splitindent">⎔ <code>splitindent()</code></h5>
-<h5 id="unindent">⎔ <code>unindent()</code></h5>
-<h5 id="checkindent">⎔ <code>checkindent()</code></h5>
-<h5 id="import">⎔ <code>import</code></h5>
-<h6 id="setup">⎔ <code>setup</code></h6>
-<h6 id="error-2">⎔ <code>error</code></h6>
-<h6 id="assert">⎔ <code>assert</code></h6>
-<h6 id="next">⎔ <code>next</code></h6>
-<h6 id="literal">⎔ <code>literal</code></h6>
-<h6 id="parse">⎔ <code>parse</code></h6>
-<h6 id="run-2">⎔ <code>run</code></h6>
-<h5 id="import-data">⎔ Import data</h5>
-<h4 id="exporting">Exporting</h4>
+<h6 id="null"><code>NULL</code></h6>
+<p>Non-destructive ‘’nil’’.</p>
+<p>Empty values, are represented as ‘null’, otherwise, in Lua, the table entry would be deleted.</p>
+<h6 id="isnull"><code>isnull</code></h6>
+<p>Check if ‘null’.</p>
+<h6 id="isinteger"><code>isinteger</code></h6>
+<p>Check if value is an integer.</p>
+<h6 id="typeof"><code>typeof</code></h6>
+<p>Get type of a value. <span class="citation" data-cites="param">@param</span> x Value to get type of. fine “Fine-grained” type (default: true). <span class="citation" data-cites="returns">@returns</span> typename [, category [, subtype]]</p>
+<p>This function returns the standard return values of Lua’s ‘’type’‘, but additionally the strings “null” if’‘x’’ is a NULL, “integer” if ‘’x’’ is an integral number.</p>
+<p>If ‘’fine’’ is ‘’true’‘, the returned’‘subtype’’ is “null” if empty, “array” for arrays containing only tables (then, the ‘’subtype’’ is identified), “map” otherwise.</p>
+<p>Note, that tables containing array or sequence elements with additional map entries (as available in Lua) are not identified.</p>
+<h6 id="escape"><code>escape()</code></h6>
+<p>Escape a string.</p>
+<h6 id="unescape"><code>unescape</code></h6>
+<p>Unescape a string.</p>
 <p>FIXME</p>
-<h5 id="export">⎔ <code>export()</code></h5>
+<h6 id="getkeys"><code>getkeys()</code></h6>
+<p>Get sorted list of keys. <span class="citation" data-cites="param">@param</span> t The table. <span class="citation" data-cites="returns">@returns</span> Array of keys in <code>t</code>.</p>
+<h6 id="tovalue"><code>tovalue()</code></h6>
+<p>Convert literal to a value. <span class="citation" data-cites="param">@param</span> s Character string. [fn] User-supplied conversion function (optional).</p>
+<h6 id="toliteral"><code>toliteral()</code></h6>
+<p>Convert value to a literal. <span class="citation" data-cites="param">@param</span> x Lua value. [fn] User-supplied conversion function (optional).</p>
+<h6 id="tokey"><code>tokey()</code></h6>
+<p>Transform into a key. <span class="citation" data-cites="param">@param</span> x The value to convert. <span class="citation" data-cites="returns">@returns</span> FIXME</p>
+<h5 id="importing">Importing</h5>
+<p>FIXME</p>
+<h6 id="isdocument"><code>isdocument()</code></h6>
+<p>Check if start of document. <span class="citation" data-cites="returns">@returns</span> boolean, name</p>
+<h6 id="splitindent"><code>splitindent()</code></h6>
+<p>Split of indentation</p>
+<h6 id="unindent"><code>unindent()</code></h6>
+<p>Unindent.</p>
+<h6 id="checkindent"><code>checkindent()</code></h6>
+<p>Check indentation</p>
+<h6 id="import"><code>import</code></h6>
+<p class="heading" id="setup"><code>setup</code></p>
+<p>Setup importer.</p>
+<p class="heading" id="error-1"><code>error</code></p>
+<p>Emit error message.</p>
+<p class="heading" id="assert"><code>assert</code></p>
+<p>Formatted assertion.</p>
+<p class="heading" id="next"><code>next</code></p>
+<p>Get next line. <span class="citation" data-cites="returns">@returns</span> <level>, “<content>”</p>
+<p class="heading" id="literal"><code>literal</code></p>
+<p>Get next “literal” line. <span class="citation" data-cites="param">@param</span> n Spaces count. <span class="citation" data-cites="returns">@returns</span> <content> literal content, or ‘’nil’’ when end is reached</p>
+<p class="heading" id="parse"><code>parse</code></p>
+<p>Parse elements in current context (ie. indentation level). <span class="citation" data-cites="param">@param</span> level Current indentation level. content Current line content.</p>
+<p class="heading" id="run-2"><code>run</code></p>
+<p>Run the importer.</p>
+<h6 id="import-data">Import data</h6>
+<p><span class="citation" data-cites="param">@param [opts]</span> Import options (FIXME).</p>
+<h5 id="exporting">Exporting</h5>
+<p>FIXME</p>
+<h6 id="export"><code>export()</code></h6>
+<p>Export a table. <span class="citation" data-cites="param">@param</span> t The table. [opts] Export options (FIXME).</p>
+<p>The provided table <code>t</code> has the format (named an unnamed documents may be mixed):</p>
+<pre><code> { { {doc1_elements} }, {doc2_name = {doc2_elements} }, ...}</code></pre>
 <p>–</p>
 </body>
 </html>
