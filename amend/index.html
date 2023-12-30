@@ -21,8 +21,6 @@
 <h2 id="description">Description</h2>
 <p>A lot of software is accompanied by additional developer tools to update or check certain features of the source code. This may, for example, include updating a date, such as in the copyright notice. In other cases the developer is required to “grep” through multiple source files to ensure correct order of elements (such as is the case in the <a href="https://www.lua.org">Lua</a> <a href="https://github.com/lua">source code</a>, for example the <code>OP</code> <a href="https://github.com/lua/lua/blob/master/lopcodes.h">order</a>) — a task fit for automation.</p>
 <p>The author(s) of <code>amend</code> have repeatedly reinvented wheels (read utilities) to prepare software releases for each new software they were working on. The <code>amend</code> package is (a possibly <a href="https://xkcd.com/927/">futile</a>) attempt to create a generic tool for such purposes: yet, the author(s) are using it succesfully in several projects and, therefore, disclose it to the public.</p>
-<h2 id="overview">Overview</h2>
-<p>TODO</p>
 <h2 id="installation">Installation</h2>
 <p>The <code>amend</code> software is intended to be installed either as a sub-module in an existing project or on a per-user basis — and, in fact, the authors do not intend to provide or encourage packaged versions.</p>
 <p>To use <code>amend</code> clone the <a href="https://github.com/fromsawa/amend">repository</a> in your favorite location. On systems that support the <a href="https://en.wikipedia.org/wiki/Shebang_(Unix)#:~:text=In%20computing%2C%20a%20shebang%20is,bang%2C%20or%20hash%2Dpling.">shebang</a> users may add the directory to the <code>PATH</code> environment variable or symbolically link the <code>amend</code> script into an existing <code>PATH</code> directory. Alternatively, a batch script must be created.</p>
@@ -32,17 +30,14 @@
 <li><a href="https://github.com/lunarmodules/luafilesystem">LuaFileSystem</a></li>
 </ul>
 <h2 id="quick-start">Quick start</h2>
-<p>TODO</p>
-<ul>
-<li>project configuration</li>
-<li>components</li>
-<li>libraries</li>
-<li>framework basics</li>
-</ul>
 <h3 id="project-file">Project file</h3>
 <p>To use <code>amend</code> within a project the file <code>.amend/project.lua</code>:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode .lua"><code class="sourceCode lua"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="cn">PROJECT</span> <span class="op">=</span> <span class="op">{}</span></span></code></pre></div>
-<p>must be created. As <code>amend</code> updates this configuration file each run automatically (based on project and operating system features it can detect), the command <code>amend --update</code> must be run.</p>
+<p>must be created. As <code>amend</code> updates this configuration file each run automatically (based on project and operating system features it can detect, for example, if ‘’CMakeLists.txt’’ file is detected, the project version will be updated from the CMake file), the command <code>amend --update</code> must be run.</p>
+<h3 id="components-and-libraries">Components and Libraries</h3>
+<p>TODO</p>
+<h3 id="framework-fundamentals">Framework fundamentals</h3>
+<p>TODO</p>
 <h3 id="examples">Examples</h3>
 <h4 id="copyright">Copyright</h4>
 <div class="sourceCode" id="cb2"><pre class="sourceCode .lua"><code class="sourceCode lua"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="kw">local</span> symbol <span class="op">=</span> <span class="st">&quot;(C)&quot;</span> <span class="co">-- copyright symbol</span></span>
@@ -94,8 +89,8 @@
 <span id="cb2-47"><a href="#cb2-47" aria-hidden="true"></a>        recurse <span class="op">=</span> <span class="kw">true</span></span>
 <span id="cb2-48"><a href="#cb2-48" aria-hidden="true"></a>    <span class="op">}</span></span>
 <span id="cb2-49"><a href="#cb2-49" aria-hidden="true"></a><span class="op">)</span></span></code></pre></div>
-<h1 id="api">API</h1>
-<h2 id="components">Components</h2>
+<h2 id="api">API</h2>
+<h3 id="components">Components</h3>
 <p>“Amend components” can be created anywhere in the source code tree in a sub-folder “.amend”. The first line of such a component starts with a shebang of the format</p>
 <pre><code>#![indicator]&lt;component-name&gt; [&lt;argument-description&gt;] -- &lt;component-description&gt;</code></pre>
 <p>where the ‘indicator’ is</p>
@@ -110,13 +105,13 @@ verbose &quot;Checking system&quot;
 assert(os.command(&quot;cmake --version&quot;))
 
 -- ...</code></pre>
-<h3 id="component.help"><code>component.help()</code></h3>
+<h4 id="component.help"><code>component.help()</code></h4>
 <p>Print components help.</p>
-<h3 id="component.find"><code>component.find()</code></h3>
+<h4 id="component.find"><code>component.find()</code></h4>
 <p>Find all components in the project tree.</p>
-<h3 id="component.runname"><code>component.run(name)</code></h3>
+<h4 id="component.runname"><code>component.run(name)</code></h4>
 <p>Run a “component”.</p>
-<h3 id="depends-name"><code>depends '&lt;name&gt;'</code></h3>
+<h4 id="depends-name"><code>depends '&lt;name&gt;'</code></h4>
 <p>Include a dependecy.</p>
 <p>The following global variables are set or determined at startup:</p>
 <pre><code> EXECDIR             Path, where &#39;&#39;amend.lua&#39;&#39; was started.
@@ -133,17 +128,17 @@ assert(os.command(&quot;cmake --version&quot;))
  TOOLS               System tools (see &#39;amend/tools.lua&#39;)
  PATHS               Additional module paths.</code></pre>
 <p>See [amend.api.project] for details.</p>
-<h2 id="logging">Logging</h2>
-<h3 id="verbose"><code>VERBOSE</code></h3>
+<h3 id="logging">Logging</h3>
+<h4 id="verbose"><code>VERBOSE</code></h4>
 <p>The global verbosity level (default: INFO).</p>
-<h3 id="verbosity-levels">Verbosity levels</h3>
+<h4 id="verbosity-levels">Verbosity levels</h4>
 <pre><code> ERROR
  WARNING
  NOTICE
  STATUS
  INFO
  DEBUG</code></pre>
-<h3 id="messagelevel-fmt-..."><code>message(level, fmt, ...)</code></h3>
+<h4 id="messagelevel-fmt-..."><code>message(level, fmt, ...)</code></h4>
 <p>Emit an informational message.</p>
 <p><em>Call</em><br />
 </p>
@@ -157,7 +152,7 @@ assert(os.command(&quot;cmake --version&quot;))
 </p>
 <pre><code>    level           The verbosity level (see above).
     fmt,...         Format string and arguments.</code></pre>
-<h3 id="verbositylevel"><code>verbosity(level)</code></h3>
+<h4 id="verbositylevel"><code>verbosity(level)</code></h4>
 <p>Set verbosity level.</p>
 <p><em>Call</em><br />
 </p>
@@ -167,20 +162,20 @@ assert(os.command(&quot;cmake --version&quot;))
 <code>verbosity(level)</code><br />
 </p>
 </blockquote>
-<h2 id="lua-extensions">Lua extensions</h2>
-<h3 id="classes">Classes</h3>
+<h3 id="lua-extensions">Lua extensions</h3>
+<h4 id="classes">Classes</h4>
 <p>Here we provide a simple class implementation supporting inheritance.</p>
-<h4 id="class.tag"><code>class.tag</code></h4>
+<h5 id="class.tag"><code>class.tag</code></h5>
 <p>This class tag serves two purposes, first to mark a table as ‘class’ and second, provides the meta-method <code>__call</code> for class instatiation.</p>
-<h4 id="void"><code>void</code></h4>
+<h5 id="void"><code>void</code></h5>
 <p>A place-holder (for <code>__public</code> fields).</p>
-<h4 id="isvoidt"><code>isvoid(t)</code></h4>
+<h5 id="isvoidt"><code>isvoid(t)</code></h5>
 <p>Check if <code>t</code> is <code>void</code>.</p>
-<h4 id="isclasst"><code>isclass(t)</code></h4>
+<h5 id="isclasst"><code>isclass(t)</code></h5>
 <p>Check if <code>t</code> is a <code>class</code>.</p>
-<h4 id="isobjectt"><code>isobject(t)</code></h4>
+<h5 id="isobjectt"><code>isobject(t)</code></h5>
 <p>Check if <code>t</code> is an object.</p>
-<h4 id="isaobj-..."><code>isa(obj, ...)</code></h4>
+<h5 id="isaobj-..."><code>isa(obj, ...)</code></h5>
 <p><em>Call</em><br />
 </p>
 <blockquote>
@@ -195,11 +190,11 @@ assert(os.command(&quot;cmake --version&quot;))
 </p>
 </blockquote>
 <p>Check if <code>obj</code> is or is derived from type <code>T</code>. This requires <code>obj</code> to be an object (see [amend.api.lua.class.isobject]).</p>
-<h4 id="class.indextk"><code>class.index(t,k)</code></h4>
+<h5 id="class.indextk"><code>class.index(t,k)</code></h5>
 <p>Retrieve index <code>k</code> from table <code>t</code> in the same way, standard <code>__index</code> does it, however, using ‘rawget’ internally.</p>
-<h4 id="class.newindex"><code>class.newindex</code></h4>
+<h5 id="class.newindex"><code>class.newindex</code></h5>
 <p>Standard <code>__newindex</code> meta-method for classes.</p>
-<h4 id="class-name-declaration"><code>class "name" { &lt;declaration&gt; }</code></h4>
+<h5 id="class-name-declaration"><code>class "name" { &lt;declaration&gt; }</code></h5>
 <p>Declare a class.</p>
 <p><em>Call</em><br />
 </p>
@@ -222,10 +217,10 @@ assert(os.command(&quot;cmake --version&quot;))
      &lt;methods&gt;
  }</code></pre>
 <p>FIXME</p>
-<h3 id="io-library"><code>io</code> library</h3>
-<h4 id="io.printf..."><code>io.printf(...)</code></h4>
+<h4 id="io-library"><code>io</code> library</h4>
+<h5 id="io.printf..."><code>io.printf(...)</code></h5>
 <p>Equivalent to C’s ‘’printf’’</p>
-<h4 id="io.dumpvalue-options"><code>io.dump(value, options)</code></h4>
+<h5 id="io.dumpvalue-options"><code>io.dump(value, options)</code></h5>
 <p>Dump <code>value</code>.</p>
 <p><em>Parameters</em><br />
 </p>
@@ -240,14 +235,22 @@ assert(os.command(&quot;cmake --version&quot;))
  key             Table key.
  prefix          Prefix for output (usually only for adding a &quot;return&quot; statement).
  quoted          Always output keys in the [&quot;quoted&quot;] format (default: false)</code></pre>
-<h4 id="io.readallfname"><code>io.readall(fname)</code></h4>
+<h5 id="io.readallfname"><code>io.readall(fname)</code></h5>
 <p>Read file.</p>
 <p><em>Parameters</em><br />
 </p>
 <pre><code>    fname           The file name.</code></pre>
 <p><em>Returns</em> text, error<br />
 </p>
-<h4 id="io.commandprogram-..."><code>io.command(program, ...)</code></h4>
+<h5 id="io.sedfname-pattern-replacement-options"><code>io.sed(fname, pattern, replacement, options)</code></h5>
+<p>Replace file contents using a pattern.</p>
+<p><em>Parameters</em><br />
+</p>
+<pre><code>    fname           The file name.
+    pattern         A &#39;gsub&#39; pattern.
+    replacement     Replacement string.
+    options         Currently not supported.</code></pre>
+<h5 id="io.commandprogram-..."><code>io.command(program, ...)</code></h5>
 <p>Execute command and read output.</p>
 <p><em>Parameters</em><br />
 </p>
@@ -255,25 +258,25 @@ assert(os.command(&quot;cmake --version&quot;))
         ...                     Format arguments.</code></pre>
 <p><em>Returns</em> output,error<br />
 </p>
-<h3 id="os-library"><code>os</code> library</h3>
-<h4 id="os.commandprogram-..."><code>os.command(program, ...)</code></h4>
+<h4 id="os-library"><code>os</code> library</h4>
+<h5 id="os.commandprogram-..."><code>os.command(program, ...)</code></h5>
 <p>Execute a command.</p>
 <p><em>Parameters</em><br />
 </p>
 <pre><code>        program                 The command to execute (as format string).
         ...                     Format arguments.</code></pre>
-<h3 id="package-library"><code>package</code> library</h3>
+<h4 id="package-library"><code>package</code> library</h4>
 <p><strong><em>Note</em></strong><br />
 </p>
 <p>In addition to standard <a href="https://github.com/lua/lua/blob/master/luaconf.h">Lua</a> conventions, here, also the <code>?/__init.lua</code> file is searched.</p>
-<h4 id="packageaddpathpath"><code>package:addpath(path)</code></h4>
+<h5 id="packageaddpathpath"><code>package:addpath(path)</code></h5>
 <p>Add search directory to script search path.</p>
-<h4 id="packagepushpathpath"><code>package:pushpath(path)</code></h4>
+<h5 id="packagepushpathpath"><code>package:pushpath(path)</code></h5>
 <p>Temporarily add a script search path.</p>
-<h4 id="packagepoppath"><code>package:poppath()</code></h4>
+<h5 id="packagepoppath"><code>package:poppath()</code></h5>
 <p>Remove previously added script search path.</p>
-<h3 id="string-library"><code>string</code> library</h3>
-<h4 id="string.anys-tbl-exact"><code>string.any(s, tbl, exact)</code></h4>
+<h4 id="string-library"><code>string</code> library</h4>
+<h5 id="string.anys-tbl-exact"><code>string.any(s, tbl, exact)</code></h5>
 <p>Match elements from a table.</p>
 <p><em>Parameters</em><br />
 </p>
@@ -285,43 +288,43 @@ assert(os.command(&quot;cmake --version&quot;))
 <blockquote>
 <pre><code>  Matched string, otherwise &#39;&#39;nil&#39;&#39;.</code></pre>
 </blockquote>
-<h4 id="string.trims"><code>string.trim(s)</code></h4>
+<h5 id="string.trims"><code>string.trim(s)</code></h5>
 <p>Trim string.</p>
-<h4 id="string.titles"><code>string.title(s)</code></h4>
+<h5 id="string.titles"><code>string.title(s)</code></h5>
 <p>Make string “titlecase”.</p>
-<h4 id="string.untitles"><code>string.untitle(s)</code></h4>
+<h5 id="string.untitles"><code>string.untitle(s)</code></h5>
 <p>Undo “titlecase”.</p>
-<h4 id="stringsplitsseparator-nmax-bregexp"><code>string:split(sSeparator, nMax, bRegexp)</code></h4>
+<h5 id="stringsplitsseparator-nmax-bregexp"><code>string:split(sSeparator, nMax, bRegexp)</code></h5>
 <p>String split. See http://lua-users.org/wiki/SplitJoin</p>
-<h4 id="string.wraps-col"><code>string.wrap(s, col)</code></h4>
+<h5 id="string.wraps-col"><code>string.wrap(s, col)</code></h5>
 <p>Wrap string (each line is detected as a paragraph) to specified column-width.</p>
-<h3 id="table-library"><code>table</code> library</h3>
-<h4 id="table.hastbl-item"><code>table.has(tbl, item)</code></h4>
+<h4 id="table-library"><code>table</code> library</h4>
+<h5 id="table.hastbl-item"><code>table.has(tbl, item)</code></h5>
 <p>Check if array-part of a table has an element.</p>
 <p><em>Parameters</em><br />
 </p>
 <pre><code>    tbl         The table to check.
     item        The item.</code></pre>
-<h4 id="table.kpairstbl"><code>table.kpairs(tbl)</code></h4>
+<h5 id="table.kpairstbl"><code>table.kpairs(tbl)</code></h5>
 <p>Key-only table iterator.</p>
 <p>This function ignores integer-valued keys.</p>
-<h4 id="table.counttbl"><code>table.count(tbl)</code></h4>
+<h5 id="table.counttbl"><code>table.count(tbl)</code></h5>
 <p>Count all keys in a table.</p>
-<h4 id="table.toptbl-idx"><code>table.top(tbl, idx)</code></h4>
+<h5 id="table.toptbl-idx"><code>table.top(tbl, idx)</code></h5>
 <p>Get array items from top</p>
-<h4 id="table.copytbl"><code>table.copy(tbl)</code></h4>
+<h5 id="table.copytbl"><code>table.copy(tbl)</code></h5>
 <p>Create a table copy.</p>
-<h4 id="table.merget-other"><code>table.merge(t, other)</code></h4>
+<h5 id="table.merget-other"><code>table.merge(t, other)</code></h5>
 <p>Merge another table into <code>t</code>.</p>
-<h4 id="table.make..."><code>table.make(...)</code></h4>
+<h5 id="table.make..."><code>table.make(...)</code></h5>
 <p>Create a new table from many.</p>
-<h4 id="table.uniquet"><code>table.unique(t)</code></h4>
+<h5 id="table.uniquet"><code>table.unique(t)</code></h5>
 <p>Make array elements unique.</p>
-<h4 id="table.insert_uniquet-v"><code>table.insert_unique(t, v)</code></h4>
+<h5 id="table.insert_uniquet-v"><code>table.insert_unique(t, v)</code></h5>
 <p>Add a unique value.</p>
-<h2 id="projects">Projects</h2>
+<h3 id="projects">Projects</h3>
 <p>FIXME</p>
-<h3 id="configuration">Configuration</h3>
+<h4 id="configuration">Configuration</h4>
 <p>Project settings.</p>
 <p>This table contains two required entries:</p>
 <pre><code>NAME            Project name.
@@ -329,25 +332,25 @@ VERSION         Project version.</code></pre>
 <p>as well as</p>
 <pre><code>USES            List of tools in use.</code></pre>
 <p>Users are free to add additional entries.</p>
-<h3 id="settings">Settings</h3>
+<h4 id="settings">Settings</h4>
 <p>FIXME</p>
-<h3 id="tools">Tools</h3>
+<h4 id="tools">Tools</h4>
 <p>FIXME</p>
-<h2 id="external-tools">External tools</h2>
-<h3 id="cmake-support">CMake support</h3>
-<h4 id="parse_argsoptions-one_value_keywords-multi_value_keywords-..."><code>parse_args(options, one_value_keywords, multi_value_keywords, ...)</code></h4>
-<h4 id="updateconfigfile"><code>update(configfile)</code></h4>
+<h3 id="external-tools">External tools</h3>
+<h4 id="cmake-support">CMake support</h4>
+<h5 id="parse_argsoptions-one_value_keywords-multi_value_keywords-..."><code>parse_args(options, one_value_keywords, multi_value_keywords, ...)</code></h5>
+<h5 id="updateconfigfile"><code>update(configfile)</code></h5>
 <p>Update PROJECT configuration.</p>
-<h4 id="check"><code>check()</code></h4>
+<h5 id="check"><code>check()</code></h5>
 <p>FIXME</p>
-<h3 id="git-support">Git support</h3>
-<h4 id="check-1"><code>check()</code></h4>
+<h4 id="git-support">Git support</h4>
+<h5 id="check-1"><code>check()</code></h5>
 <p>Check if project uses git and update PROJECT settings.</p>
-<h3 id="c-support">C support</h3>
-<h3 id="cxx-support">CXX support</h3>
-<h2 id="utilities">Utilities</h2>
-<h3 id="extensions-to-luafilesystem">Extensions to LuaFileSystem</h3>
-<h4 id="fs.existsfilename"><code>fs.exists(filename)</code></h4>
+<h4 id="c-support">C support</h4>
+<h4 id="cxx-support">CXX support</h4>
+<h3 id="utilities">Utilities</h3>
+<h4 id="extensions-to-luafilesystem">Extensions to LuaFileSystem</h4>
+<h5 id="fs.existsfilename"><code>fs.exists(filename)</code></h5>
 <p>Check if file exists.</p>
 <p><em>Parameters</em><br />
 </p>
@@ -357,7 +360,7 @@ VERSION         Project version.</code></pre>
 <blockquote>
 <pre><code>  &#39;&#39;true&#39;&#39; if file or path exists, &#39;&#39;false&#39;&#39; otherwise.</code></pre>
 </blockquote>
-<h4 id="fs.isnewerfile-another"><code>fs.isnewer(file, another)</code></h4>
+<h5 id="fs.isnewerfile-another"><code>fs.isnewer(file, another)</code></h5>
 <p>Check if a ‘’file’’ is newer than ‘’another’’.</p>
 <p><em>Returns</em><br />
 </p>
@@ -366,9 +369,9 @@ VERSION         Project version.</code></pre>
   &#39;&#39;true&#39;&#39; if `file` is newer or `another` does not exist,
   &#39;&#39;false&#39;&#39; otherwise.</code></pre>
 </blockquote>
-<h4 id="fs.anynewerfile-..."><code>fs.anynewer(file, ...)</code></h4>
+<h5 id="fs.anynewerfile-..."><code>fs.anynewer(file, ...)</code></h5>
 <p>Check if any other file is newer than <code>file</code>.</p>
-<h4 id="fs.concat..."><code>fs.concat(...)</code></h4>
+<h5 id="fs.concat..."><code>fs.concat(...)</code></h5>
 <p>Concatenate path elements.</p>
 <p><em>Parameters</em><br />
 </p>
@@ -378,14 +381,14 @@ VERSION         Project version.</code></pre>
 <blockquote>
 <pre><code>  Concatenated path elements using builtin directory seperator.</code></pre>
 </blockquote>
-<h4 id="fs.partsfname"><code>fs.parts(fname)</code></h4>
+<h5 id="fs.partsfname"><code>fs.parts(fname)</code></h5>
 <p>Get parts of a file name (path, file and extension).</p>
 <p><em>Parameters</em><br />
 </p>
 <pre><code>    fname           The file- or path-name.</code></pre>
 <p><em>Returns</em> &lt;path&gt;,&lt;file-name&gt;,&lt;extension&gt;<br />
 </p>
-<h4 id="fs.relpathpath-root"><code>fs.relpath(path, root)</code></h4>
+<h5 id="fs.relpathpath-root"><code>fs.relpath(path, root)</code></h5>
 <p>Get relative path with respect to a “root”.</p>
 <p><em>Parameters</em><br />
 </p>
@@ -393,13 +396,13 @@ VERSION         Project version.</code></pre>
     root [optional] The root path.</code></pre>
 <p><em>Returns</em> &lt;relative-path&gt;<br />
 </p>
-<h4 id="fs.readwildfile-tbl"><code>fs.readwild(file, tbl)</code></h4>
+<h5 id="fs.readwildfile-tbl"><code>fs.readwild(file, tbl)</code></h5>
 <p>Read a wildcard pattern file.</p>
 <p><em>Parameters</em><br />
 </p>
 <pre><code>    file                The file name (containing wildcard patterns and comments).
     tbl [optional]      Existing table (with regex patterns).</code></pre>
-<h4 id="fs.dodirpath-callback-options"><code>fs.dodir(path, callback, options)</code></h4>
+<h5 id="fs.dodirpath-callback-options"><code>fs.dodir(path, callback, options)</code></h5>
 <p>Execute a function for each directory element possibly recursively.</p>
 <p><em>Parameters</em><br />
 </p>
@@ -423,60 +426,60 @@ VERSION         Project version.</code></pre>
  follow              Follow symbolic links (default: false)
  recurse             Enable directory recursion (default: false).
  depth               Directory depth (default: 0)</code></pre>
-<h4 id="fs.pushddir"><code>fs.pushd(dir)</code></h4>
+<h5 id="fs.pushddir"><code>fs.pushd(dir)</code></h5>
 <p>“Push” directory.</p>
 <p>Equivalent of shell command ‘’pushd’’.</p>
-<h4 id="fs.popd"><code>fs.popd()</code></h4>
+<h5 id="fs.popd"><code>fs.popd()</code></h5>
 <p>“Pop” directory.</p>
 <p>Equivalent of shell command ‘’popd’’.</p>
-<h4 id="fs.rmkdirfpath"><code>fs.rmkdir(fpath)</code></h4>
+<h5 id="fs.rmkdirfpath"><code>fs.rmkdir(fpath)</code></h5>
 <p>Recursively create directory.</p>
 <p><em>Parameters</em><br />
 </p>
 <pre><code>    fpath       The directory-path to create.</code></pre>
 <p><em>Returns</em> &lt;status&gt;[, &lt;error-message&gt;]<br />
 </p>
-<h4 id="fs.grepfname-pattern"><code>fs.grep(fname, pattern)</code></h4>
+<h5 id="fs.grepfname-pattern"><code>fs.grep(fname, pattern)</code></h5>
 <p>Grep-like matching</p>
-<h4 id="fs.filetypefname"><code>fs.filetype(fname)</code></h4>
+<h5 id="fs.filetypefname"><code>fs.filetype(fname)</code></h5>
 <p>Get file type (from extension).</p>
-<h4 id="fs.whichexecutable"><code>fs.which(executable)</code></h4>
+<h5 id="fs.whichexecutable"><code>fs.which(executable)</code></h5>
 <p>Get full path to an executable.</p>
-<h4 id="fs.touch..."><code>fs.touch(...)</code></h4>
+<h5 id="fs.touch..."><code>fs.touch(...)</code></h5>
 <p>Touch all files, ensuring same access and modification time.</p>
 <p><em>Parameters</em><br />
 </p>
 <pre><code>    files...    File names to touch.
     [options]   Options (last argument).</code></pre>
 <p>FIXME options</p>
-<h4 id="fs.fullpathpath"><code>fs.fullpath(path)</code></h4>
+<h5 id="fs.fullpathpath"><code>fs.fullpath(path)</code></h5>
 <p>Retrieve full path of a possibly relative <code>path</code>.</p>
-<h3 id="editing">Editing</h3>
+<h4 id="editing">Editing</h4>
 <p>Amend provides several utilities for editing files.</p>
 <p>FIXME</p>
-<h4 id="clear"><code>clear()</code></h4>
+<h5 id="clear"><code>clear()</code></h5>
 <p>Clear contents.</p>
-<h4 id="addlncode-..."><code>addln(code, ...)</code></h4>
+<h5 id="addlncode-..."><code>addln(code, ...)</code></h5>
 <p>Add a code line.</p>
-<h4 id="addcode-..."><code>add(code, ...)</code></h4>
+<h5 id="addcode-..."><code>add(code, ...)</code></h5>
 <p>Add code to current line.</p>
-<h4 id="sedpattern-replace"><code>sed(pattern, replace)</code></h4>
+<h5 id="sedpattern-replace"><code>sed(pattern, replace)</code></h5>
 <p>In-place sed.</p>
-<h4 id="writestream"><code>write(stream)</code></h4>
+<h5 id="writestream"><code>write(stream)</code></h5>
 <p>Write section to a stream.</p>
-<h4 id="section"><strong>section</strong><code>()</code></h4>
+<h5 id="section"><strong>section</strong><code>()</code></h5>
 <p>Constructor.</p>
-<h4 id="parsepath"><code>parse(path)</code></h4>
+<h5 id="parsepath"><code>parse(path)</code></h5>
 <p>Parse file (into sections)</p>
-<h4 id="update"><code>update()</code></h4>
+<h5 id="update"><code>update()</code></h5>
 <p>Update file.</p>
-<h4 id="sedpattern-replace-1"><code>sed(pattern, replace)</code></h4>
+<h5 id="sedpattern-replace-1"><code>sed(pattern, replace)</code></h5>
 <p>In-place sed.</p>
-<h4 id="edit.filefname"><code>edit.file(fname)</code></h4>
+<h5 id="edit.filefname"><code>edit.file(fname)</code></h5>
 <p>Edit a file.</p>
 <p>FIXME</p>
-<h3 id="csv-file-tools">CSV-file tools</h3>
-<h4 id="csv.loadfname-opts"><code>csv.load(fname, opts)</code></h4>
+<h4 id="csv-file-tools">CSV-file tools</h4>
+<h5 id="csv.loadfname-opts"><code>csv.load(fname, opts)</code></h5>
 <p>Read a CSV file.</p>
 <p><em>Parameters</em><br />
 </p>
@@ -489,12 +492,12 @@ VERSION         Project version.</code></pre>
     columns = { &lt;column-names-list&gt; },   
     filter = &lt;item-filter-function&gt;
 }</code></pre>
-<h3 id="readable">ReaDaBLe</h3>
+<h4 id="readable">ReaDaBLe</h4>
 <p>Configuration files suck - yet they are invaluable. They are especially valuable if they are <em>indeed</em> human readable and possibly even grep’able (oh yes, the good ol’ days of text-only files).</p>
 <p>There are a number of good syntaxes, that provide sensible approaches - note, under the precondition of structured and hierarchical representation of data. Most of them, however, do either not follow the <a href="https://www.urbandictionary.com/define.php?term=KISS%20principle">KISS principle</a>, are hardly human readable (without an IDE), or, simply lack the possibility of annotations (read: comments).</p>
 <p>Well, you heard it, YAML to the rescue: yes, but <a href="noyaml.com">No thanks!</a> (the author does recognize the ideas behind YAML; he also wants to express, that alternatives, such as XML or JSON, have their merit).</p>
 <p>RDBL provides a <a href="https://xkcd.com/927/">simple sub-set</a> of YAML, is easy to parse and consitent.</p>
-<h4 id="format">Format</h4>
+<h5 id="format">Format</h5>
 <p>The typical structure of an RDBL document is:</p>
 <pre><code># A comment.
 🗎
@@ -504,12 +507,12 @@ another:
     # sequence
     - a: 1
     - b: 2</code></pre>
-<h4 id="general">General</h4>
-<h5 id="documents">Documents</h5>
+<h5 id="general">General</h5>
+<h6 id="documents">Documents</h6>
 <p>RDBL files contain at least one document. A document starts with</p>
 <pre><code>🗎 document-name</code></pre>
 <p>where the ‘document-name’ is optional. If YAML compatibility is required (default in v0.0), the document marker is “—”.</p>
-<h5 id="hierarchy">Hierarchy</h5>
+<h6 id="hierarchy">Hierarchy</h6>
 <p>Hierarchical order is defined by indentation. The document must always use the same indentation, consisting of number of spaces (default: 4).</p>
 <p>Tab characters (ASCII 0x09) are not allowed.</p>
 <p>Elements are organized in sequences (starting with a dash) and (unordered) maps. ::footnote Note, that the export of maps will list their keys sorted (unless an implementation chooses to support an “ORDER” tag).</p>
@@ -523,12 +526,12 @@ another:
 <pre><code>key:
 key: value</code></pre>
 <p>FIXME</p>
-<h5 id="comments">Comments</h5>
+<h6 id="comments">Comments</h6>
 <p>RDBL files may be commented using the number sign or hash (#). Comments may only appear prior to an entry using identical indentation, otherwise, the ‘#’ is recognized as a normal character.</p>
-<h5 id="keys">Keys</h5>
+<h6 id="keys">Keys</h6>
 <p>RDBL only allows integral or character literals as keys. Other types, such as floating-point values or boolean types will not be supported, as these are not generally unambiguous.</p>
-<h5 id="value-types">Value types</h5>
-<h6 id="string"><code>string</code></h6>
+<h6 id="value-types">Value types</h6>
+<p class="heading" id="string"><code>string</code></p>
 <p>Character sequences are represented in three forms:</p>
 <ol type="1">
 <li>character literals (unquoted, may contain spaces),</li>
@@ -536,13 +539,13 @@ key: value</code></pre>
 <li>verbatim (multi-line) strings.</li>
 </ol>
 <p>Example: literal: a string literal may contain spaces quoted: “This is a "quoted" string.” verbatim: | Verbatim strings span multiple lines and retain their indentation</p>
-<h6 id="integer"><code>integer</code></h6>
+<p class="heading" id="integer"><code>integer</code></p>
 <p>When using integral types (including binary, octal and hexadecimal representation), care has to be taken, that the target system reading the data does support their size.</p>
-<h6 id="float"><code>float</code></h6>
+<p class="heading" id="float"><code>float</code></p>
 <p>Floating-point values are supported in scientific notation (e.g. “1.0E-3”). Infinity is represented as “∞” or “inf”. For unrepresentable floats, “NaN” (any case) is used.</p>
-<h6 id="array"><code>array</code></h6>
+<p class="heading" id="array"><code>array</code></p>
 <p>Arrays may be represented by a comma-separated list of values enclosed in braces.</p>
-<h6 id="user-types">user-types</h6>
+<p class="heading" id="user-types">user-types</p>
 <p>Implementations may choose to support other types by supplying a dictionary or translation function.</p>
 <p>For example, to support boolean and similar values (here, Lua language), a table of the format</p>
 <pre><code>{
@@ -554,19 +557,19 @@ key: value</code></pre>
     [&quot;no&quot;] = false
 }</code></pre>
 <p>may be provided to the <code>import</code> function.</p>
-<h4 id="api-1">API</h4>
-<h5 id="types">Types</h5>
-<h6 id="order"><code>ORDER</code></h6>
+<h5 id="api-1">API</h5>
+<h6 id="types">Types</h6>
+<p class="heading" id="order"><code>ORDER</code></p>
 <p>Element order.</p>
 <p>FIXME</p>
-<h6 id="null"><code>NULL</code></h6>
+<p class="heading" id="null"><code>NULL</code></p>
 <p>Non-destructive ‘’nil’’.</p>
 <p>Empty values, are represented as ‘null’, otherwise, in Lua, the table entry would be deleted.</p>
-<h6 id="isnull"><code>isnull</code></h6>
+<p class="heading" id="isnull"><code>isnull</code></p>
 <p>Check if ‘null’.</p>
-<h6 id="isinteger"><code>isinteger</code></h6>
+<p class="heading" id="isinteger"><code>isinteger</code></p>
 <p>Check if value is an integer.</p>
-<h6 id="typeof"><code>typeof</code></h6>
+<p class="heading" id="typeof"><code>typeof</code></p>
 <p>Get type of a value.</p>
 <p><em>Parameters</em><br />
 </p>
@@ -582,12 +585,12 @@ key: value</code></pre>
  &quot;array&quot;     for arrays containing only tables (then, the &#39;&#39;subtype&#39;&#39; is identified),
  &quot;map&quot;       otherwise.</code></pre>
 <p>Note, that tables containing array or sequence elements with additional map entries (as available in Lua) are not identified.</p>
-<h6 id="escape"><code>escape()</code></h6>
+<p class="heading" id="escape"><code>escape()</code></p>
 <p>Escape a string.</p>
-<h6 id="unescape"><code>unescape</code></h6>
+<p class="heading" id="unescape"><code>unescape</code></p>
 <p>Unescape a string.</p>
 <p>FIXME</p>
-<h6 id="getkeys"><code>getkeys()</code></h6>
+<p class="heading" id="getkeys"><code>getkeys()</code></p>
 <p>Get sorted list of keys.</p>
 <p><em>Parameters</em><br />
 </p>
@@ -597,19 +600,19 @@ key: value</code></pre>
 <blockquote>
 <pre><code>  Array of keys in `t`.</code></pre>
 </blockquote>
-<h6 id="tovalue"><code>tovalue()</code></h6>
+<p class="heading" id="tovalue"><code>tovalue()</code></p>
 <p>Convert literal to a value.</p>
 <p><em>Parameters</em><br />
 </p>
 <pre><code>    s       Character string.
     [fn]    User-supplied conversion function (optional).</code></pre>
-<h6 id="toliteral"><code>toliteral()</code></h6>
+<p class="heading" id="toliteral"><code>toliteral()</code></p>
 <p>Convert value to a literal.</p>
 <p><em>Parameters</em><br />
 </p>
 <pre><code>    x       Lua value.
     [fn]    User-supplied conversion function (optional).</code></pre>
-<h6 id="tokey"><code>tokey()</code></h6>
+<p class="heading" id="tokey"><code>tokey()</code></p>
 <p>Transform into a key.</p>
 <p><em>Parameters</em><br />
 </p>
@@ -619,19 +622,19 @@ key: value</code></pre>
 <blockquote>
 <pre><code>  FIXME</code></pre>
 </blockquote>
-<h5 id="importing">Importing</h5>
+<h6 id="importing">Importing</h6>
 <p>FIXME</p>
-<h6 id="isdocument"><code>isdocument()</code></h6>
+<p class="heading" id="isdocument"><code>isdocument()</code></p>
 <p>Check if start of document.</p>
 <p><em>Returns</em> boolean, name<br />
 </p>
-<h6 id="splitindent"><code>splitindent()</code></h6>
+<p class="heading" id="splitindent"><code>splitindent()</code></p>
 <p>Split of indentation</p>
-<h6 id="unindent"><code>unindent()</code></h6>
+<p class="heading" id="unindent"><code>unindent()</code></p>
 <p>Unindent.</p>
-<h6 id="checkindent"><code>checkindent()</code></h6>
+<p class="heading" id="checkindent"><code>checkindent()</code></p>
 <p>Check indentation</p>
-<h6 id="import"><code>import</code></h6>
+<p class="heading" id="import"><code>import</code></p>
 <p class="heading" id="setup"><code>setup</code></p>
 <p>Setup importer.</p>
 <p class="heading" id="error"><code>error</code></p>
@@ -660,13 +663,13 @@ key: value</code></pre>
     content     Current line content.</code></pre>
 <p class="heading" id="run"><code>run</code></p>
 <p>Run the importer.</p>
-<h6 id="import-data">Import data</h6>
+<p class="heading" id="import-data">Import data</p>
 <p><em>Parameters</em><br />
 </p>
 <pre><code>    [opts]  Import options (FIXME).</code></pre>
-<h5 id="exporting">Exporting</h5>
+<h6 id="exporting">Exporting</h6>
 <p>FIXME</p>
-<h6 id="export"><code>export()</code></h6>
+<p class="heading" id="export"><code>export()</code></p>
 <p>Export a table.</p>
 <p><em>Parameters</em><br />
 </p>
