@@ -39,7 +39,7 @@
 <h3 id="components-and-libraries">Components and Libraries</h3>
 <p>Components (i.e. an executable script) may be created on a per directory basis inside a sub-directory <code>.amend/</code>. These components are executed within the directory (as work directory). Also, the <code>.amend/</code>-subdirectory is added as search path for Lua scripts. See the <a href="#amend.example.copyright">copyright updater</a> as example, and, as well, the <a href="#amend.api.components">full</a> documentation.</p>
 <h3 id="framework-fundamentals">Framework fundamentals</h3>
-<p>TODO</p>
+<p>A versatile framework is provided for developing ‘components’. This includes, for example, the possibility to update code regions in several files (e.g., source files may be updated from an enumeration in a header file).</p>
 <h3 id="examples">Examples</h3>
 <h4 id="amend.example.copyright">Copyright</h4>
 <div class="sourceCode" id="cb2"><pre class="sourceCode .lua"><code class="sourceCode lua"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="kw">local</span> symbol <span class="op">=</span> <span class="st">&quot;(C)&quot;</span> <span class="co">-- copyright symbol</span></span>
@@ -219,7 +219,6 @@ assert(os.command(&quot;cmake --version&quot;))
      },
      &lt;methods&gt;
  }</code></pre>
-<p>FIXME</p>
 <h4 id="amend.api.lua.io"><code>io</code> library</h4>
 <h5 id="io.printf..."><code>io.printf(...)</code></h5>
 <p>Equivalent to C’s ‘’printf’’</p>
@@ -326,31 +325,38 @@ assert(os.command(&quot;cmake --version&quot;))
 <h5 id="table.insert_uniquet-v"><code>table.insert_unique(t, v)</code></h5>
 <p>Add a unique value.</p>
 <h3 id="amend.api.project">Projects</h3>
-<p>FIXME</p>
-<h4 id="amend.api.project.config">Configuration</h4>
-<p>Project settings.</p>
-<p>This table contains two required entries:</p>
+<h4 id="amend.api.project.settings">Settings</h4>
+<p>The <code>PROJECT</code> settings table contains two required entries:</p>
 <pre><code>NAME            Project name.
-VERSION         Project version.</code></pre>
+VERSION         Project version ({major, minor[, patch[, tweak]]}).</code></pre>
 <p>as well as</p>
 <pre><code>USES            List of tools in use.</code></pre>
 <p>Users are free to add additional entries.</p>
-<h4 id="amend.api.project.settings">Settings</h4>
+<h4 id="amend.api.project.config">Configuration</h4>
 <p>FIXME</p>
 <h4 id="amend.api.project.tools">Tools</h4>
-<p>FIXME</p>
+<p>The <code>TOOLS</code> table associates an external command with a “tool”. For example:</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode .lua"><code class="sourceCode lua"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true"></a><span class="cn">TOOLS</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true"></a>    <span class="op">[</span><span class="st">&quot;git&quot;</span><span class="op">]</span> <span class="op">=</span> auto<span class="op">,</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true"></a>    <span class="op">[</span><span class="st">&quot;clang&quot;</span><span class="op">]</span> <span class="op">=</span> <span class="st">&quot;/usr/bin/clang-15&quot;</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true"></a><span class="op">}</span></span></code></pre></div>
+<p>will tell <code>amend</code> to automatically detect the git command and version, while clang will explicitely use major version 15.</p>
+<p>See the <a href="#amend.api.use">external tools</a> chapter for further information.</p>
 <h3 id="amend.api.use">External tools</h3>
 <h4 id="amend.api.use.cmake">CMake support</h4>
-<h5 id="parse_argsoptions-one_value_keywords-multi_value_keywords-..."><code>parse_args(options, one_value_keywords, multi_value_keywords, ...)</code></h5>
 <h5 id="updateconfigfile"><code>update(configfile)</code></h5>
-<p>Update PROJECT configuration.</p>
+<p>Update PROJECT configuration from the ‘CMakeLists.txt’ file.</p>
 <h5 id="check"><code>check()</code></h5>
-<p>FIXME</p>
+<p>Check if project uses CMake and update PROJECT settings.</p>
 <h4 id="amend.api.use.git">Git support</h4>
 <h5 id="check-1"><code>check()</code></h5>
 <p>Check if project uses git and update PROJECT settings.</p>
+<h4 id="amend.api.use.clang">CLang support</h4>
+<p>FIXME</p>
 <h4 id="amend.api.use.c">C support</h4>
+<p>TBD</p>
 <h4 id="amend.api.use.cxx">CXX support</h4>
+<p>TBD</p>
 <h3 id="amend.api.util">Utilities</h3>
 <h4 id="amend.api.util.filesystem">Extensions to LuaFileSystem</h4>
 <h5 id="fs.existsfilename"><code>fs.exists(filename)</code></h5>
