@@ -33,13 +33,15 @@
 <h3 id="project-file">Project file</h3>
 <p>To use <code>amend</code> within a project the file <code>.amend/project.lua</code>:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode .lua"><code class="sourceCode lua"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="cn">PROJECT</span> <span class="op">=</span> <span class="op">{}</span></span></code></pre></div>
-<p>must be created. As <code>amend</code> updates this configuration file each run automatically (based on project and operating system features it can detect, for example, if ‘’CMakeLists.txt’’ file is detected, the project version will be updated from the CMake file), the command <code>amend --update</code> must be run.</p>
+<p>must be created and the command <code>amend --update</code> must be run.</p>
+<p>This project file may be updated automatically in some circumenstances (such as a new CMake file).</p>
+<p>See the <a href="#amend.api.project">Projects</a> API for further details.</p>
 <h3 id="components-and-libraries">Components and Libraries</h3>
-<p>TODO</p>
+<p>Components (i.e. an executable script) may be created on a per directory basis inside a sub-directory <code>.amend/</code>. These components are executed within the directory (as work directory). Also, the <code>.amend/</code>-subdirectory is added as search path for Lua scripts. See the <a href="#amend.example.copyright">copyright updater</a> as example, and, as well, the <a href="#amend.api.components">full</a> documentation.</p>
 <h3 id="framework-fundamentals">Framework fundamentals</h3>
 <p>TODO</p>
 <h3 id="examples">Examples</h3>
-<h4 id="copyright">Copyright</h4>
+<h4 id="amend.example.copyright">Copyright</h4>
 <div class="sourceCode" id="cb2"><pre class="sourceCode .lua"><code class="sourceCode lua"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="kw">local</span> symbol <span class="op">=</span> <span class="st">&quot;(C)&quot;</span> <span class="co">-- copyright symbol</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a><span class="kw">local</span> pattern <span class="op">=</span> <span class="op">{</span><span class="st">&quot;Yogev Sawa&quot;</span><span class="op">}</span> <span class="co">-- author pattern(s)</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a><span class="kw">local</span> year <span class="op">=</span> <span class="fu">tonumber</span><span class="op">(</span><span class="cn">OPTIONS</span><span class="op">[</span><span class="dv">1</span><span class="op">]</span> <span class="kw">or</span> <span class="fu">os.date</span><span class="op">(</span><span class="st">&quot;%Y&quot;</span><span class="op">))</span> <span class="co">-- current year</span></span>
@@ -68,29 +70,30 @@
 <span id="cb2-26"><a href="#cb2-26" aria-hidden="true"></a>            message<span class="op">(</span><span class="cn">STATUS</span><span class="op">,</span> <span class="st">&quot;    updating %s&quot;</span><span class="op">,</span> fname<span class="op">)</span></span>
 <span id="cb2-27"><a href="#cb2-27" aria-hidden="true"></a></span>
 <span id="cb2-28"><a href="#cb2-28" aria-hidden="true"></a>            <span class="kw">local</span> before<span class="op">,</span> after <span class="op">=</span> txt<span class="op">:</span><span class="fu">sub</span><span class="op">(</span><span class="dv">1</span><span class="op">,</span> bpos <span class="op">-</span> <span class="dv">1</span><span class="op">),</span> txt<span class="op">:</span><span class="fu">sub</span><span class="op">(</span>epos <span class="op">+</span> <span class="dv">1</span><span class="op">,</span> <span class="op">-</span><span class="dv">1</span><span class="op">)</span></span>
-<span id="cb2-29"><a href="#cb2-29" aria-hidden="true"></a>            <span class="kw">local</span> newcopyright <span class="op">=</span> <span class="fu">string.format</span><span class="op">(</span><span class="st">&quot;%s %s %s %s&quot;</span><span class="op">,</span> copyright<span class="op">,</span> symbol<span class="op">,</span> years<span class="op">,</span> author<span class="op">)</span></span>
-<span id="cb2-30"><a href="#cb2-30" aria-hidden="true"></a></span>
-<span id="cb2-31"><a href="#cb2-31" aria-hidden="true"></a>            f <span class="op">=</span> <span class="fu">assert</span><span class="op">(</span><span class="fu">io.open</span><span class="op">(</span>fname<span class="op">,</span> <span class="st">&quot;w&quot;</span><span class="op">))</span></span>
-<span id="cb2-32"><a href="#cb2-32" aria-hidden="true"></a>            f<span class="op">:</span><span class="fu">write</span><span class="op">(</span>before<span class="op">,</span> newcopyright<span class="op">,</span> after<span class="op">)</span></span>
-<span id="cb2-33"><a href="#cb2-33" aria-hidden="true"></a>            f<span class="op">:</span><span class="fu">close</span><span class="op">()</span></span>
-<span id="cb2-34"><a href="#cb2-34" aria-hidden="true"></a>        <span class="cf">end</span></span>
-<span id="cb2-35"><a href="#cb2-35" aria-hidden="true"></a>    <span class="cf">end</span></span>
-<span id="cb2-36"><a href="#cb2-36" aria-hidden="true"></a><span class="kw">end</span></span>
-<span id="cb2-37"><a href="#cb2-37" aria-hidden="true"></a></span>
-<span id="cb2-38"><a href="#cb2-38" aria-hidden="true"></a>fs<span class="op">.</span>dodir<span class="op">(</span></span>
-<span id="cb2-39"><a href="#cb2-39" aria-hidden="true"></a>    <span class="st">&quot;.&quot;</span><span class="op">,</span></span>
-<span id="cb2-40"><a href="#cb2-40" aria-hidden="true"></a>    <span class="kw">function</span><span class="op">(</span>item<span class="op">)</span></span>
-<span id="cb2-41"><a href="#cb2-41" aria-hidden="true"></a>        fix_copyright<span class="op">(</span>item<span class="op">[</span><span class="dv">0</span><span class="op">])</span></span>
-<span id="cb2-42"><a href="#cb2-42" aria-hidden="true"></a>    <span class="kw">end</span><span class="op">,</span></span>
-<span id="cb2-43"><a href="#cb2-43" aria-hidden="true"></a>    <span class="op">{</span></span>
-<span id="cb2-44"><a href="#cb2-44" aria-hidden="true"></a>        exclude <span class="op">=</span> <span class="cn">IGNORE</span><span class="op">,</span></span>
-<span id="cb2-45"><a href="#cb2-45" aria-hidden="true"></a>        extension <span class="op">=</span> <span class="op">{</span><span class="st">&quot;.lua&quot;</span><span class="op">,</span> <span class="st">&quot;.cmake&quot;</span><span class="op">,</span> <span class="st">&quot;.md&quot;</span><span class="op">},</span></span>
-<span id="cb2-46"><a href="#cb2-46" aria-hidden="true"></a>        include <span class="op">=</span> <span class="op">{},</span></span>
-<span id="cb2-47"><a href="#cb2-47" aria-hidden="true"></a>        recurse <span class="op">=</span> <span class="kw">true</span></span>
-<span id="cb2-48"><a href="#cb2-48" aria-hidden="true"></a>    <span class="op">}</span></span>
-<span id="cb2-49"><a href="#cb2-49" aria-hidden="true"></a><span class="op">)</span></span></code></pre></div>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true"></a>            <span class="kw">local</span> newcopyright <span class="op">=</span> <span class="fu">string.format</span><span class="op">(</span><span class="st">&quot;%s %s %s %s&quot;</span><span class="op">,</span> </span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true"></a>                                            copyright<span class="op">,</span> symbol<span class="op">,</span> years<span class="op">,</span> author<span class="op">)</span></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true"></a></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true"></a>            f <span class="op">=</span> <span class="fu">assert</span><span class="op">(</span><span class="fu">io.open</span><span class="op">(</span>fname<span class="op">,</span> <span class="st">&quot;w&quot;</span><span class="op">))</span></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true"></a>            f<span class="op">:</span><span class="fu">write</span><span class="op">(</span>before<span class="op">,</span> newcopyright<span class="op">,</span> after<span class="op">)</span></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true"></a>            f<span class="op">:</span><span class="fu">close</span><span class="op">()</span></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true"></a>        <span class="cf">end</span></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true"></a>    <span class="cf">end</span></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true"></a><span class="kw">end</span></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true"></a></span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true"></a>fs<span class="op">.</span>dodir<span class="op">(</span></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true"></a>    <span class="st">&quot;.&quot;</span><span class="op">,</span></span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true"></a>    <span class="kw">function</span><span class="op">(</span>item<span class="op">)</span></span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true"></a>        fix_copyright<span class="op">(</span>item<span class="op">[</span><span class="dv">0</span><span class="op">])</span></span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true"></a>    <span class="kw">end</span><span class="op">,</span></span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true"></a>    <span class="op">{</span></span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true"></a>        exclude <span class="op">=</span> <span class="cn">IGNORE</span><span class="op">,</span></span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true"></a>        extension <span class="op">=</span> <span class="op">{</span><span class="st">&quot;.lua&quot;</span><span class="op">,</span> <span class="st">&quot;.cmake&quot;</span><span class="op">,</span> <span class="st">&quot;.md&quot;</span><span class="op">},</span></span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true"></a>        include <span class="op">=</span> <span class="op">{},</span></span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true"></a>        recurse <span class="op">=</span> <span class="kw">true</span></span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true"></a>    <span class="op">}</span></span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true"></a><span class="op">)</span></span></code></pre></div>
 <h2 id="api">API</h2>
-<h3 id="components">Components</h3>
+<h3 id="amend.api.components">Components</h3>
 <p>“Amend components” can be created anywhere in the source code tree in a sub-folder “.amend”. The first line of such a component starts with a shebang of the format</p>
 <pre><code>#![indicator]&lt;component-name&gt; [&lt;argument-description&gt;] -- &lt;component-description&gt;</code></pre>
 <p>where the ‘indicator’ is</p>
@@ -127,8 +130,8 @@ assert(os.command(&quot;cmake --version&quot;))
  CONFIG              Amend settings.
  TOOLS               System tools (see &#39;amend/tools.lua&#39;)
  PATHS               Additional module paths.</code></pre>
-<p>See [amend.api.project] for details.</p>
-<h3 id="logging">Logging</h3>
+<p>See <a href="#amend.api.project">Projects</a> for details.</p>
+<h3 id="amend.api.logging">Logging</h3>
 <h4 id="verbose"><code>VERBOSE</code></h4>
 <p>The global verbosity level (default: INFO).</p>
 <h4 id="verbosity-levels">Verbosity levels</h4>
@@ -162,8 +165,8 @@ assert(os.command(&quot;cmake --version&quot;))
 <code>verbosity(level)</code><br />
 </p>
 </blockquote>
-<h3 id="lua-extensions">Lua extensions</h3>
-<h4 id="classes">Classes</h4>
+<h3 id="amend.api.lua">Lua extensions</h3>
+<h4 id="amend.api.lua.class">Classes</h4>
 <p>Here we provide a simple class implementation supporting inheritance.</p>
 <h5 id="class.tag"><code>class.tag</code></h5>
 <p>This class tag serves two purposes, first to mark a table as ‘class’ and second, provides the meta-method <code>__call</code> for class instatiation.</p>
@@ -173,7 +176,7 @@ assert(os.command(&quot;cmake --version&quot;))
 <p>Check if <code>t</code> is <code>void</code>.</p>
 <h5 id="isclasst"><code>isclass(t)</code></h5>
 <p>Check if <code>t</code> is a <code>class</code>.</p>
-<h5 id="isobjectt"><code>isobject(t)</code></h5>
+<h5 id="isobjectt"><code id="isobject">isobject(t)</code></h5>
 <p>Check if <code>t</code> is an object.</p>
 <h5 id="isaobj-..."><code>isa(obj, ...)</code></h5>
 <p><em>Call</em><br />
@@ -189,7 +192,7 @@ assert(os.command(&quot;cmake --version&quot;))
 <p><code>isa(obj, {T})</code><br />
 </p>
 </blockquote>
-<p>Check if <code>obj</code> is or is derived from type <code>T</code>. This requires <code>obj</code> to be an object (see [amend.api.lua.class.isobject]).</p>
+<p>Check if <code>obj</code> is or is derived from type <code>T</code>. This requires <code>obj</code> to be an object (see <a href="#isobject">isobject</a>).</p>
 <h5 id="class.indextk"><code>class.index(t,k)</code></h5>
 <p>Retrieve index <code>k</code> from table <code>t</code> in the same way, standard <code>__index</code> does it, however, using ‘rawget’ internally.</p>
 <h5 id="class.newindex"><code>class.newindex</code></h5>
@@ -217,7 +220,7 @@ assert(os.command(&quot;cmake --version&quot;))
      &lt;methods&gt;
  }</code></pre>
 <p>FIXME</p>
-<h4 id="io-library"><code>io</code> library</h4>
+<h4 id="amend.api.lua.io"><code>io</code> library</h4>
 <h5 id="io.printf..."><code>io.printf(...)</code></h5>
 <p>Equivalent to C’s ‘’printf’’</p>
 <h5 id="io.dumpvalue-options"><code>io.dump(value, options)</code></h5>
@@ -258,14 +261,14 @@ assert(os.command(&quot;cmake --version&quot;))
         ...                     Format arguments.</code></pre>
 <p><em>Returns</em> output,error<br />
 </p>
-<h4 id="os-library"><code>os</code> library</h4>
+<h4 id="amend.api.lua.os"><code>os</code> library</h4>
 <h5 id="os.commandprogram-..."><code>os.command(program, ...)</code></h5>
 <p>Execute a command.</p>
 <p><em>Parameters</em><br />
 </p>
 <pre><code>        program                 The command to execute (as format string).
         ...                     Format arguments.</code></pre>
-<h4 id="package-library"><code>package</code> library</h4>
+<h4 id="amend.api.lua.package"><code>package</code> library</h4>
 <p><strong><em>Note</em></strong><br />
 </p>
 <p>In addition to standard <a href="https://github.com/lua/lua/blob/master/luaconf.h">Lua</a> conventions, here, also the <code>?/__init.lua</code> file is searched.</p>
@@ -275,7 +278,7 @@ assert(os.command(&quot;cmake --version&quot;))
 <p>Temporarily add a script search path.</p>
 <h5 id="packagepoppath"><code>package:poppath()</code></h5>
 <p>Remove previously added script search path.</p>
-<h4 id="string-library"><code>string</code> library</h4>
+<h4 id="amend.api.lua.string"><code>string</code> library</h4>
 <h5 id="string.anys-tbl-exact"><code>string.any(s, tbl, exact)</code></h5>
 <p>Match elements from a table.</p>
 <p><em>Parameters</em><br />
@@ -298,7 +301,7 @@ assert(os.command(&quot;cmake --version&quot;))
 <p>String split. See http://lua-users.org/wiki/SplitJoin</p>
 <h5 id="string.wraps-col"><code>string.wrap(s, col)</code></h5>
 <p>Wrap string (each line is detected as a paragraph) to specified column-width.</p>
-<h4 id="table-library"><code>table</code> library</h4>
+<h4 id="amend.api.lua.table"><code>table</code> library</h4>
 <h5 id="table.hastbl-item"><code>table.has(tbl, item)</code></h5>
 <p>Check if array-part of a table has an element.</p>
 <p><em>Parameters</em><br />
@@ -322,9 +325,9 @@ assert(os.command(&quot;cmake --version&quot;))
 <p>Make array elements unique.</p>
 <h5 id="table.insert_uniquet-v"><code>table.insert_unique(t, v)</code></h5>
 <p>Add a unique value.</p>
-<h3 id="projects">Projects</h3>
+<h3 id="amend.api.project">Projects</h3>
 <p>FIXME</p>
-<h4 id="configuration">Configuration</h4>
+<h4 id="amend.api.project.config">Configuration</h4>
 <p>Project settings.</p>
 <p>This table contains two required entries:</p>
 <pre><code>NAME            Project name.
@@ -332,24 +335,24 @@ VERSION         Project version.</code></pre>
 <p>as well as</p>
 <pre><code>USES            List of tools in use.</code></pre>
 <p>Users are free to add additional entries.</p>
-<h4 id="settings">Settings</h4>
+<h4 id="amend.api.project.settings">Settings</h4>
 <p>FIXME</p>
-<h4 id="tools">Tools</h4>
+<h4 id="amend.api.project.tools">Tools</h4>
 <p>FIXME</p>
-<h3 id="external-tools">External tools</h3>
-<h4 id="cmake-support">CMake support</h4>
+<h3 id="amend.api.use">External tools</h3>
+<h4 id="amend.api.use.cmake">CMake support</h4>
 <h5 id="parse_argsoptions-one_value_keywords-multi_value_keywords-..."><code>parse_args(options, one_value_keywords, multi_value_keywords, ...)</code></h5>
 <h5 id="updateconfigfile"><code>update(configfile)</code></h5>
 <p>Update PROJECT configuration.</p>
 <h5 id="check"><code>check()</code></h5>
 <p>FIXME</p>
-<h4 id="git-support">Git support</h4>
+<h4 id="amend.api.use.git">Git support</h4>
 <h5 id="check-1"><code>check()</code></h5>
 <p>Check if project uses git and update PROJECT settings.</p>
-<h4 id="c-support">C support</h4>
-<h4 id="cxx-support">CXX support</h4>
-<h3 id="utilities">Utilities</h3>
-<h4 id="extensions-to-luafilesystem">Extensions to LuaFileSystem</h4>
+<h4 id="amend.api.use.c">C support</h4>
+<h4 id="amend.api.use.cxx">CXX support</h4>
+<h3 id="amend.api.util">Utilities</h3>
+<h4 id="amend.api.util.filesystem">Extensions to LuaFileSystem</h4>
 <h5 id="fs.existsfilename"><code>fs.exists(filename)</code></h5>
 <p>Check if file exists.</p>
 <p><em>Parameters</em><br />
@@ -454,7 +457,7 @@ VERSION         Project version.</code></pre>
 <p>FIXME options</p>
 <h5 id="fs.fullpathpath"><code>fs.fullpath(path)</code></h5>
 <p>Retrieve full path of a possibly relative <code>path</code>.</p>
-<h4 id="editing">Editing</h4>
+<h4 id="amend.api.util.edit">Editing</h4>
 <p>Amend provides several utilities for editing files.</p>
 <p>FIXME</p>
 <h5 id="clear"><code>clear()</code></h5>
@@ -478,7 +481,7 @@ VERSION         Project version.</code></pre>
 <h5 id="edit.filefname"><code>edit.file(fname)</code></h5>
 <p>Edit a file.</p>
 <p>FIXME</p>
-<h4 id="csv-file-tools">CSV-file tools</h4>
+<h4 id="amend.api.util.csv">CSV-file tools</h4>
 <h5 id="csv.loadfname-opts"><code>csv.load(fname, opts)</code></h5>
 <p>Read a CSV file.</p>
 <p><em>Parameters</em><br />
@@ -492,12 +495,12 @@ VERSION         Project version.</code></pre>
     columns = { &lt;column-names-list&gt; },   
     filter = &lt;item-filter-function&gt;
 }</code></pre>
-<h4 id="readable">ReaDaBLe</h4>
+<h4 id="amend.api.util.rdbl">ReaDaBLe</h4>
 <p>Configuration files suck - yet they are invaluable. They are especially valuable if they are <em>indeed</em> human readable and possibly even grep’able (oh yes, the good ol’ days of text-only files).</p>
 <p>There are a number of good syntaxes, that provide sensible approaches - note, under the precondition of structured and hierarchical representation of data. Most of them, however, do either not follow the <a href="https://www.urbandictionary.com/define.php?term=KISS%20principle">KISS principle</a>, are hardly human readable (without an IDE), or, simply lack the possibility of annotations (read: comments).</p>
-<p>Well, you heard it, YAML to the rescue: yes, but <a href="noyaml.com">No thanks!</a> (the author does recognize the ideas behind YAML; he also wants to express, that alternatives, such as XML or JSON, have their merit).</p>
+<p>Well, you heard it, YAML to the rescue: yes, but <a href="https://noyaml.com">No thanks!</a> (the author does recognize the ideas behind YAML; he also wants to express, that alternatives, such as XML or JSON, have their merit).</p>
 <p>RDBL provides a <a href="https://xkcd.com/927/">simple sub-set</a> of YAML, is easy to parse and consitent.</p>
-<h5 id="format">Format</h5>
+<h5 id="amend.api.util.rdbl.version">Format</h5>
 <p>The typical structure of an RDBL document is:</p>
 <pre><code># A comment.
 🗎
@@ -558,7 +561,7 @@ key: value</code></pre>
 }</code></pre>
 <p>may be provided to the <code>import</code> function.</p>
 <h5 id="api-1">API</h5>
-<h6 id="types">Types</h6>
+<h6 id="amend.api.util.rdbl.types">Types</h6>
 <p class="heading" id="order"><code>ORDER</code></p>
 <p>Element order.</p>
 <p>FIXME</p>
@@ -622,7 +625,7 @@ key: value</code></pre>
 <blockquote>
 <pre><code>  FIXME</code></pre>
 </blockquote>
-<h6 id="importing">Importing</h6>
+<h6 id="amend.api.util.rdbl.import">Importing</h6>
 <p>FIXME</p>
 <p class="heading" id="isdocument"><code>isdocument()</code></p>
 <p>Check if start of document.</p>
@@ -667,7 +670,7 @@ key: value</code></pre>
 <p><em>Parameters</em><br />
 </p>
 <pre><code>    [opts]  Import options (FIXME).</code></pre>
-<h6 id="exporting">Exporting</h6>
+<h6 id="amend.api.util.rdbl.export">Exporting</h6>
 <p>FIXME</p>
 <p class="heading" id="export"><code>export()</code></p>
 <p>Export a table.</p>
