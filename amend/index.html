@@ -219,10 +219,6 @@ assert(os.command(&quot;cmake --version&quot;))
      },
      &lt;methods&gt;
  }</code></pre>
-<<<<<<< HEAD
-<p>FIXME</p>
-=======
->>>>>>> f164d87e9119680291e684e303077979f9dba2e1
 <h4 id="amend.api.lua.io"><code>io</code> library</h4>
 <h5 id="io.printf..."><code>io.printf(...)</code></h5>
 <p>Equivalent to C’s ‘’printf’’</p>
@@ -281,6 +277,21 @@ assert(os.command(&quot;cmake --version&quot;))
 <p>Temporarily add a script search path.</p>
 <h5 id="packagepoppath"><code>package:poppath()</code></h5>
 <p>Remove previously added script search path.</p>
+<h4 id="amend.api.lua.version">Version number library</h4>
+<h5 id="version"><code>version</code></h5>
+<p>A broken down version number which consist of a major, minor and a patch version.</p>
+<h5 id="versiont"><code>version(t)</code></h5>
+<p><em>Parameters</em><br />
+</p>
+<pre><code>    t       Version definition (table of numbers or string).</code></pre>
+<p>A version number is expected to be sequence of three numbers, the major, minor and patch version. Additional version specifications may be provided but are ignored.</p>
+<p>In string notation, the version is</p>
+<pre><code> &quot;&lt;major&gt;[.&lt;minor&gt;[.&lt;patch&gt;[&lt;punctuation&gt;&lt;rest&gt;]]]&quot;</code></pre>
+<p>where ‘[]’ denotes optional parts.</p>
+<h5 id="versiontostring"><code>version:tostring()</code></h5>
+<p>Convert version to a string.</p>
+<h5 id="versionvalue"><code>version:value()</code></h5>
+<p>Calculate a comparable number.</p>
 <h4 id="amend.api.lua.string"><code>string</code> library</h4>
 <h5 id="string.anys-tbl-exact"><code>string.any(s, tbl, exact)</code></h5>
 <p>Match elements from a table.</p>
@@ -288,7 +299,7 @@ assert(os.command(&quot;cmake --version&quot;))
 </p>
 <pre><code>    s                   The string.
     tbl                 Table with regex-patterns.
-    exact [optional]    Boolean value indicating if matching must be exact. ??? FIXME what does this mean ???</code></pre>
+    exact [optional]    If &#39;&#39;true&#39;&#39;, the matched part must be identical to the full string.</code></pre>
 <p><em>Returns</em><br />
 </p>
 <blockquote>
@@ -329,64 +340,69 @@ assert(os.command(&quot;cmake --version&quot;))
 <h5 id="table.insert_uniquet-v"><code>table.insert_unique(t, v)</code></h5>
 <p>Add a unique value.</p>
 <h3 id="amend.api.project">Projects</h3>
-<<<<<<< HEAD
-<p>FIXME</p>
-<h4 id="amend.api.project.config">Configuration</h4>
-<p>Project settings.</p>
-<p>This table contains two required entries:</p>
-=======
 <h4 id="amend.api.project.settings">Settings</h4>
 <p>The <code>PROJECT</code> settings table contains two required entries:</p>
->>>>>>> f164d87e9119680291e684e303077979f9dba2e1
 <pre><code>NAME            Project name.
 VERSION         Project version ({major, minor[, patch[, tweak]]}).</code></pre>
 <p>as well as</p>
 <pre><code>USES            List of tools in use.</code></pre>
 <p>Users are free to add additional entries.</p>
-<<<<<<< HEAD
-<h4 id="amend.api.project.settings">Settings</h4>
-<p>FIXME</p>
-<h4 id="amend.api.project.tools">Tools</h4>
-<p>FIXME</p>
-<h3 id="amend.api.use">External tools</h3>
-<h4 id="amend.api.use.cmake">CMake support</h4>
-<h5 id="parse_argsoptions-one_value_keywords-multi_value_keywords-..."><code>parse_args(options, one_value_keywords, multi_value_keywords, ...)</code></h5>
-=======
 <h4 id="amend.api.project.config">Configuration</h4>
-<p>FIXME</p>
+<p>The CONFIG table has the following entries:</p>
+<h5 id="extensions">EXTENSIONS</h5>
+<p>This table maps language to file extensions. Example:</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode .lua"><code class="sourceCode lua"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true"></a><span class="cn">EXTENSIONS</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true"></a>    <span class="cn">C</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true"></a>        <span class="st">&quot;.h&quot;</span><span class="op">,</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true"></a>        <span class="st">&quot;.c&quot;</span><span class="op">,</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true"></a>    <span class="op">},</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true"></a>    <span class="cn">CXX</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true"></a>        <span class="st">&quot;.hh&quot;</span><span class="op">,</span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true"></a>        <span class="st">&quot;.hpp&quot;</span><span class="op">,</span></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true"></a>        <span class="st">&quot;.hxx&quot;</span><span class="op">,</span></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true"></a>        <span class="st">&quot;.cc&quot;</span><span class="op">,</span></span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true"></a>        <span class="st">&quot;.cpp&quot;</span><span class="op">,</span></span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true"></a>        <span class="st">&quot;.cxx&quot;</span><span class="op">,</span></span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true"></a>    <span class="op">}</span></span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true"></a><span class="op">}</span></span></code></pre></div>
+<h5 id="lang">LANG</h5>
+<p>Here, additional processing can be defined, for example:</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode .lua"><code class="sourceCode lua"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true"></a><span class="cn">LANG</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true"></a>    <span class="cn">C</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true"></a>        <span class="cn">POST</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true"></a>            <span class="cn">TIDY</span> <span class="op">=</span> <span class="st">&quot;clang-format&quot;</span><span class="op">,</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true"></a>        <span class="op">},</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true"></a>        <span class="cn">PRE</span> <span class="op">=</span> <span class="op">{},</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true"></a>    <span class="op">},</span></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true"></a>    <span class="cn">CXX</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true"></a>        <span class="cn">POST</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true"></a>            <span class="cn">TIDY</span> <span class="op">=</span> <span class="st">&quot;clang-format&quot;</span><span class="op">,</span></span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true"></a>        <span class="op">},</span></span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true"></a>        <span class="cn">PRE</span> <span class="op">=</span> <span class="op">{},</span></span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true"></a>    <span class="op">},</span></span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true"></a><span class="op">}</span></span></code></pre></div>
 <h4 id="amend.api.project.tools">Tools</h4>
 <p>The <code>TOOLS</code> table associates an external command with a “tool”. For example:</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode .lua"><code class="sourceCode lua"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true"></a><span class="cn">TOOLS</span> <span class="op">=</span> <span class="op">{</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true"></a>    <span class="op">[</span><span class="st">&quot;git&quot;</span><span class="op">]</span> <span class="op">=</span> auto<span class="op">,</span></span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true"></a>    <span class="op">[</span><span class="st">&quot;clang&quot;</span><span class="op">]</span> <span class="op">=</span> <span class="st">&quot;/usr/bin/clang-15&quot;</span></span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true"></a><span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode .lua"><code class="sourceCode lua"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true"></a><span class="cn">TOOLS</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true"></a>    <span class="op">[</span><span class="st">&quot;git&quot;</span><span class="op">]</span> <span class="op">=</span> auto<span class="op">,</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true"></a>    <span class="op">[</span><span class="st">&quot;clang&quot;</span><span class="op">]</span> <span class="op">=</span> <span class="st">&quot;/usr/bin/clang-15&quot;</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true"></a><span class="op">}</span></span></code></pre></div>
 <p>will tell <code>amend</code> to automatically detect the git command and version, while clang will explicitely use major version 15.</p>
 <p>See the <a href="#amend.api.use">external tools</a> chapter for further information.</p>
 <h3 id="amend.api.use">External tools</h3>
 <h4 id="amend.api.use.cmake">CMake support</h4>
->>>>>>> f164d87e9119680291e684e303077979f9dba2e1
 <h5 id="updateconfigfile"><code>update(configfile)</code></h5>
 <p>Update PROJECT configuration from the ‘CMakeLists.txt’ file.</p>
 <h5 id="check"><code>check()</code></h5>
-<<<<<<< HEAD
-<p>FIXME</p>
-<h4 id="amend.api.use.git">Git support</h4>
-<h5 id="check-1"><code>check()</code></h5>
-<p>Check if project uses git and update PROJECT settings.</p>
-<h4 id="amend.api.use.c">C support</h4>
-<h4 id="amend.api.use.cxx">CXX support</h4>
-=======
 <p>Check if project uses CMake and update PROJECT settings.</p>
 <h4 id="amend.api.use.git">Git support</h4>
 <h5 id="check-1"><code>check()</code></h5>
 <p>Check if project uses git and update PROJECT settings.</p>
 <h4 id="amend.api.use.clang">CLang support</h4>
-<p>FIXME</p>
 <h4 id="amend.api.use.c">C support</h4>
 <p>TBD</p>
 <h4 id="amend.api.use.cxx">CXX support</h4>
 <p>TBD</p>
->>>>>>> f164d87e9119680291e684e303077979f9dba2e1
 <h3 id="amend.api.util">Utilities</h3>
 <h4 id="amend.api.util.filesystem">Extensions to LuaFileSystem</h4>
 <h5 id="fs.existsfilename"><code>fs.exists(filename)</code></h5>
@@ -490,12 +506,11 @@ VERSION         Project version ({major, minor[, patch[, tweak]]}).</code></pre>
 </p>
 <pre><code>    files...    File names to touch.
     [options]   Options (last argument).</code></pre>
-<p>FIXME options</p>
+<p><strong>Options</strong>: ‘’atime’’ The file access time (current time if omitted). ‘’mtime’’ The file modification time (current time if omitted).</p>
 <h5 id="fs.fullpathpath"><code>fs.fullpath(path)</code></h5>
 <p>Retrieve full path of a possibly relative <code>path</code>.</p>
 <h4 id="amend.api.util.edit">Editing</h4>
 <p>Amend provides several utilities for editing files.</p>
-<p>FIXME</p>
 <h5 id="clear"><code>clear()</code></h5>
 <p>Clear contents.</p>
 <h5 id="addlncode-..."><code>addln(code, ...)</code></h5>
@@ -514,9 +529,23 @@ VERSION         Project version ({major, minor[, patch[, tweak]]}).</code></pre>
 <p>Update file.</p>
 <h5 id="sedpattern-replace-1"><code>sed(pattern, replace)</code></h5>
 <p>In-place sed.</p>
-<h5 id="edit.filefname"><code>edit.file(fname)</code></h5>
-<p>Edit a file.</p>
-<p>FIXME</p>
+<h5 id="edit.filefname-..."><code>edit.file{fname, ...}</code></h5>
+<p>Edit a single or multiple files.</p>
+<p>Example: Assuming we have a file ‘myfile.hh’ with the following</p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode .hh"><code class="sourceCode cpp"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true"></a><span class="kw">constexpr</span> <span class="at">const</span> <span class="dt">char</span> *version_s = <span class="st">&quot;1.2.3&quot;</span>;</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true"></a><span class="kw">constexpr</span> <span class="dt">int</span> version[] = {</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true"></a>    <span class="co">//@AMEND{myfile:version}</span></span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true"></a>    <span class="co">//@</span><span class="re">END</span><span class="co">{myfile:version}</span></span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true"></a>}</span></code></pre></div>
+<p>then we can use the following script snippet to automatically update the contents:</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode .lua"><code class="sourceCode lua"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true"></a><span class="kw">local</span> version <span class="op">=</span> <span class="op">{</span><span class="dv">0</span><span class="op">,</span><span class="dv">1</span><span class="op">,</span><span class="dv">2</span><span class="op">,</span><span class="dv">3</span><span class="op">}</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true"></a><span class="kw">local</span> code <span class="op">=</span> edit<span class="op">.</span>file<span class="op">{</span><span class="st">&#39;myfile.hh&#39;</span><span class="op">}</span></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true"></a>code<span class="op">:</span>sed<span class="op">(</span><span class="st">&#39;(constexpr const char [*]version_s) = .*;&#39;</span><span class="op">,</span> <span class="st">&#39;%1 = %q&#39;</span><span class="op">,</span> <span class="fu">table.concat</span><span class="op">(</span>version<span class="op">,</span> <span class="st">&quot;.&quot;</span><span class="op">))</span></span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true"></a>code<span class="op">[</span><span class="st">&#39;myfile:version&#39;</span><span class="op">]:</span>clear<span class="op">()</span></span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true"></a><span class="cf">for</span> <span class="cn">_</span><span class="op">,</span> v <span class="kw">in</span> <span class="fu">ipairs</span><span class="op">(</span>version<span class="op">)</span> <span class="cf">do</span></span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true"></a>    code<span class="op">[</span><span class="st">&#39;myfile:version&#39;</span><span class="op">]:</span>addln<span class="op">(</span><span class="st">&quot;%d,&quot;</span><span class="op">,</span> v<span class="op">)</span></span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true"></a><span class="cf">end</span></span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true"></a>code<span class="op">:</span>update<span class="op">()</span></span></code></pre></div>
 <h4 id="amend.api.util.csv">CSV-file tools</h4>
 <h5 id="csv.loadfname-opts"><code>csv.load(fname, opts)</code></h5>
 <p>Read a CSV file.</p>
@@ -560,11 +589,9 @@ another:
 - key:
 - key: value
 - value</code></pre>
-<p>FIXME</p>
 <p>Maps are of the format</p>
 <pre><code>key:
 key: value</code></pre>
-<p>FIXME</p>
 <h6 id="comments">Comments</h6>
 <p>RDBL files may be commented using the number sign or hash (#). Comments may only appear prior to an entry using identical indentation, otherwise, the ‘#’ is recognized as a normal character.</p>
 <h6 id="keys">Keys</h6>
@@ -600,7 +627,6 @@ key: value</code></pre>
 <h6 id="amend.api.util.rdbl.types">Types</h6>
 <p class="heading" id="order"><code>ORDER</code></p>
 <p>Element order.</p>
-<p>FIXME</p>
 <p class="heading" id="null"><code>NULL</code></p>
 <p>Non-destructive ‘’nil’’.</p>
 <p>Empty values, are represented as ‘null’, otherwise, in Lua, the table entry would be deleted.</p>
@@ -628,7 +654,6 @@ key: value</code></pre>
 <p>Escape a string.</p>
 <p class="heading" id="unescape"><code>unescape</code></p>
 <p>Unescape a string.</p>
-<p>FIXME</p>
 <p class="heading" id="getkeys"><code>getkeys()</code></p>
 <p>Get sorted list of keys.</p>
 <p><em>Parameters</em><br />
