@@ -322,6 +322,8 @@ assert(os.command(&quot;cmake --version&quot;))
 </p>
 <pre><code>    tbl         The table to check.
     item        The item.</code></pre>
+<h5 id="table.keystbl"><code>table.keys(tbl)</code></h5>
+<p>Get list of keys in a table.</p>
 <h5 id="table.kpairstbl"><code>table.kpairs(tbl)</code></h5>
 <p>Key-only table iterator.</p>
 <p>This function ignores integer-valued keys.</p>
@@ -513,10 +515,21 @@ VERSION         Project version ({major, minor[, patch[, tweak]]}).</code></pre>
 <p>Amend provides several utilities for editing files.</p>
 <h5 id="clear"><code>clear()</code></h5>
 <p>Clear contents.</p>
-<h5 id="addlncode-..."><code>addln(code, ...)</code></h5>
-<p>Add a code line.</p>
 <h5 id="addcode-..."><code>add(code, ...)</code></h5>
 <p>Add code to current line.</p>
+<h5 id="addlncode-..."><code>addln(code, ...)</code></h5>
+<p><em>Call</em><br />
+</p>
+<blockquote>
+addln()<br />
+addln(
+<table>
+<p>)<br />
+addln(<plain string>)<br />
+addln(<format>, &lt;format arguments…&gt;)<br />
+</p>
+</blockquote>
+<p>Add a code line with formatting or array of lines.</p>
 <h5 id="sedpattern-replace"><code>sed(pattern, replace)</code></h5>
 <p>In-place sed.</p>
 <h5 id="writestream"><code>write(stream)</code></h5>
