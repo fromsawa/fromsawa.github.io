@@ -197,6 +197,7 @@ assert(os.command(&quot;cmake --version&quot;))
 <p>Retrieve index <code>k</code> from table <code>t</code> in the same way, standard <code>__index</code> does it, however, using ‘rawget’ internally.</p>
 <h5 id="class.newindex"><code>class.newindex</code></h5>
 <p>Standard <code>__newindex</code> meta-method for classes.</p>
+<p>This disallows unknown dictionary keys while integer keys (ie. array keys) are allowed.</p>
 <h5 id="class-name-declaration"><code>class "name" { &lt;declaration&gt; }</code></h5>
 <p>Declare a class.</p>
 <p><em>Call</em><br />
@@ -236,7 +237,8 @@ assert(os.command(&quot;cmake --version&quot;))
  level           Indentation level.
  key             Table key.
  prefix          Prefix for output (usually only for adding a &quot;return&quot; statement).
- quoted          Always output keys in the [&quot;quoted&quot;] format (default: false)</code></pre>
+ quoted          Always output keys in the [&quot;quoted&quot;] format (default: false)
+ indexes         Index sorting (&quot;first&quot; or &quot;last&quot;; default: last for objects, first otherwise)</code></pre>
 <h5 id="io.readallfname"><code>io.readall(fname)</code></h5>
 <p>Read file.</p>
 <p><em>Parameters</em><br />
